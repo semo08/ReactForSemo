@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Movie from "../components/Movie";
-const API_KEY = 'a29edf6ab4f6a55946f26c28cd66c6fb';
-const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
+import { API_KEY, IMG_BASE_URL } from "../config";
 
 function Home() {
     const [loading, setLoading] = useState(true);
@@ -42,6 +41,7 @@ function Home() {
           {movies.map((movie) => (
             <Movie
               key={movie.id}
+              id={movie.id}
               coverImg={`${IMG_BASE_URL}${movie.poster_path}`}
               title={movie.original_title}
               overview={movie.overview}
