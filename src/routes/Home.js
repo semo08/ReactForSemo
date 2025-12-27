@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Movie from "../components/Movie";
-import { API_KEY, IMG_BASE_URL } from "../config";
+const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 function Home() {
     const [loading, setLoading] = useState(true);
@@ -8,7 +9,7 @@ function Home() {
   const [genres, setGenres] = useState({});
 
   const getGenres = async () => {
-    const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=ko-KR`);
+    const response = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${API_KEY}&language=en-US`);
     const json = await response.json();
     const genreMap = {};
     json.genres.forEach(genre => {
@@ -20,7 +21,7 @@ function Home() {
   const getMovies = async () => {
     const json = await (
       await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ko-KR`
+        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US`
       )
     ).json();
     setMovies(json.results);

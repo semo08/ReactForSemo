@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { API_KEY } from "../config";
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 function Detail() {
     const { id } = useParams();

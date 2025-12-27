@@ -1,3 +1,5 @@
 {
-    "iis.configDir": ""
+    "iis.configDir": "",
+    "editor.fontFamily": "'Hack', 'Fira Code', Consolas, 'Courier New', monospace",
+    // "editor.fontLigatures": true,
 }
