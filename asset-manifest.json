@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.js": "/static/js/main.c4da4c19.js",
-    "index.html": "/index.html",
-    "main.c4da4c19.js.map": "/static/js/main.c4da4c19.js.map"
+    "main.js": "/ReactForSemo/static/js/main.c4da4c19.js",
+    "index.html": "/ReactForSemo/index.html",
+    "main.c4da4c19.js.map": "/ReactForSemo/static/js/main.c4da4c19.js.map"
   },
   "entrypoints": [
     "static/js/main.c4da4c19.js"
