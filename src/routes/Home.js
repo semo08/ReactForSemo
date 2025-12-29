@@ -1,3 +1,4 @@
+// 메인 페이지
 import { useState, useEffect } from "react";
 import Movie from "../components/Movie";
 import styles from "./Home.module.css";
@@ -29,15 +30,17 @@ function Home() {
 
   const getMovies = async () => {
     try {
-      const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US`
-      );
-      const json = await response.json();
-      if (json.results) {
-        setMovies(json.results);
-      } else {
-        console.error("API Error:", json);
-        setMovies([]);
+      for (let page = 1; page <= 5; page++) {
+        const response = await fetch(
+          `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
+        );
+        const json = await response.json();
+        if (json.results) {
+          setMovies(json.results);
+        } else {
+          console.error("API Error:", json);
+          setMovies([]);
+        }
       }
     } catch (error) {
       console.error("Failed to fetch movies:", error);
@@ -45,6 +48,7 @@ function Home() {
     } finally {
       setLoading(false);
     }
+
   };
   useEffect(() => {
     getGenres();
@@ -57,18 +61,20 @@ function Home() {
       {loading ? (
         <div className={styles.loading}>Loading...</div>
       ) : (
-        <div className={styles.moviesGrid}>
-          {movies.map((movie) => (
-            <Movie
-              key={movie.id}
-              id={movie.id}
-              coverImg={`${IMG_BASE_URL}${movie.poster_path}`}
-              title={movie.original_title}
-              overview={movie.overview}
-              genres={genres}
-              genre_ids={movie.genre_ids}
-            />
-          ))}
+        <div>
+          <div className={styles.moviesGrid}>
+            {movies.map((movie) => (
+              <Movie  // pagenation
+                key={movie.id}
+                id={movie.id}
+                coverImg={`${IMG_BASE_URL}${movie.poster_path}`}
+                title={movie.title}
+                overview={movie.overview}
+                genres={genres}
+                genre_ids={movie.genre_ids}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>

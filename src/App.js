@@ -1,3 +1,4 @@
+// 라우팅 설정
 import {
   BrowserRouter as Router,
   Switch,
@@ -22,5 +23,3 @@ function App() {
 }
 
 export default App;
-
-//  `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=ko-KR`

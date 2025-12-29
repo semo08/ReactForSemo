@@ -1,12 +1,16 @@
+// 영화 정보를 카드로 표시. Movie List
 import PropTypes from "prop-types";
 import {Link} from "react-router-dom";
 import styles from "./Movie.module.css";
 
 function Movie({ id, coverImg, title, overview, genre_ids, genres }) {
+
   return (
     <div className={styles.card}>
       <div className={styles.posterContainer}>
-        <img className={styles.poster} src={coverImg} alt={title} />
+        <Link to={`/movie/${id}`}>
+          <img className={styles.poster} src={coverImg} alt={title}/>
+        </Link>
       </div>
       <div className={styles.content}>
         <h2 className={styles.title}>

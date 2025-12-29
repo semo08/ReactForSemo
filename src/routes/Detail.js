@@ -1,8 +1,9 @@
+// 상세 페이지
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
-function Detail({ coverImg, title, overview, genre_ids, genres }) {
+function Detail() {
     const { id } = useParams();
 
     useEffect(() => {
@@ -14,7 +15,6 @@ function Detail({ coverImg, title, overview, genre_ids, genres }) {
         };
         getMovie();
     }, [id]);
-
 
     return (
     <h1>Detail</h1>
