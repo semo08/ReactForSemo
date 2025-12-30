@@ -9,6 +9,8 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
   const [genres, setGenres] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5;
 
   const getGenres = async () => {
     try {
@@ -28,19 +30,18 @@ function Home() {
     }
   };
 
-  const getMovies = async () => {
+  const getMovies = async (page) => {
+    setLoading(true);
     try {
-      for (let page = 1; page <= 5; page++) {
-        const response = await fetch(
-          `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
-        );
-        const json = await response.json();
-        if (json.results) {
-          setMovies(json.results);
-        } else {
-          console.error("API Error:", json);
-          setMovies([]);
-        }
+      const response = await fetch(
+        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
+      );
+      const json = await response.json();
+      if (json.results) {
+        setMovies(json.results);
+      } else {
+        console.error("API Error:", json);
+        setMovies([]);
       }
     } catch (error) {
       console.error("Failed to fetch movies:", error);
@@ -52,9 +53,14 @@ function Home() {
   };
   useEffect(() => {
     getGenres();
-    getMovies();
-  }, []);
+    getMovies(currentPage);   // 현재 페이지의 영화만 불러오기
+  }, [currentPage]);    // currentPage가 바뀔 때마다 실행
   console.log(movies);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo(0, 0);    // 페이지 변경 시 맨 위로 스크롤
+  };
 
   return (
     <div className={styles.container}>
@@ -74,6 +80,31 @@ function Home() {
                 genre_ids={movie.genre_ids}
               />
             ))}
+          </div>
+          <div className={styles.pagination}>
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+            >
+              Back
+            </button>
+
+            {[...Array(totalPages)].map((_, index) => (
+              <button
+                key={index + 1}
+                onClick={() => handlePageChange(index + 1)}
+                className={currentPage === index + 1 ? styles.active : ''}
+              >
+                {index + 1}
+              </button>
+            ))}
+
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
           </div>
         </div>
       )}
