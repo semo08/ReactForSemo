@@ -236,3 +236,15 @@
     font-size: 24px;
   }
 }
+
+/* 로딩 스타일 (Home.js와 동일) */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+}
