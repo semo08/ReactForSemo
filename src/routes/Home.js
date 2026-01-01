@@ -1,9 +1,19 @@
-// 메인 페이지
+// ========================================
+// Home.js - 메인 페이지 (영화 목록)
+// ========================================
+// TMDb API에서 인기 영화 목록을 가져와서 표시
+// 페이지네이션(5페이지) 지원
+// 뒤로가기 시 스크롤 위치 복원 기능 포함
+
 import { useState, useEffect } from "react";
 import Movie from "../components/Movie";
 import styles from "./Home.module.css";
-const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";
-const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+
+// ========================================
+// API 설정
+// ========================================
+const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";      // 포스터 이미지 URL
+const API_KEY = process.env.REACT_APP_TMDB_API_KEY;          // 환경변수에서 API 키 가져오기
 
 function Home() {
   const [loading, setLoading] = useState(true);
@@ -51,11 +61,38 @@ function Home() {
     }
 
   };
+  // ========================================
+  // 영화 데이터 로드
+  // ========================================
   useEffect(() => {
     getGenres();
     getMovies(currentPage);   // 현재 페이지의 영화만 불러오기
   }, [currentPage]);    // currentPage가 바뀔 때마다 실행
   console.log(movies);
+
+  // ========================================
+  // 스크롤 위치 복원 (뒤로가기 시)
+  // ========================================
+  useEffect(() => {
+    // 컴포넌트가 mount될 때 (페이지 로드 시)
+    // sessionStorage에서 저장된 스크롤 위치 가져오기
+    const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
+
+    if (savedScrollPosition) {
+      // 저장된 위치가 있으면 해당 위치로 스크롤
+      // setTimeout을 사용하는 이유: 영화 데이터 로드 후 스크롤해야 정확함
+      setTimeout(() => {
+        window.scrollTo(0, parseInt(savedScrollPosition));
+      }, 100); // 100ms 후 실행
+    }
+
+    // 컴포넌트가 unmount될 때 (다른 페이지로 이동할 때)
+    // cleanup 함수: return으로 반환하는 함수는 컴포넌트가 사라질 때 실행됨
+    return () => {
+      // 현재 스크롤 위치를 sessionStorage에 저장
+      sessionStorage.setItem('homeScrollPosition', window.scrollY.toString());
+    };
+  }, []); // 빈 배열: 컴포넌트 mount/unmount 시에만 실행
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
