@@ -1,0 +1,341 @@
+/* ========================================
+   Header.module.css - Cinemo 헤더 스타일
+   ======================================== */
+
+/* ========================================
+   1. 헤더 기본 스타일
+   ======================================== */
+.header {
+    /* 위치: 화면 맨 위에 고정 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+
+    /* 높이 */
+    height: 60px;
+
+    /* 배경: 반투명 다크 */
+    background: rgba(15, 15, 15, 0.85);
+
+    /* 하단 테두리: 미세한 흰색 선 */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+    /* Glassmorphism 효과: 뒷배경 흐림 */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px); /* Safari 지원 */
+
+    /* z-index: 다른 요소들 위에 표시 */
+    z-index: 1000;
+
+    /* 애니메이션: 부드러운 전환 효과 */
+    transition: background 0.3s ease;
+}
+
+/* ========================================
+   2. 스크롤 시 배경 진해짐
+   ======================================== */
+.header.scrolled {
+    /* 스크롤 내리면 거의 불투명하게 변경 */
+    background: rgba(15, 15, 15, 0.98);
+}
+
+/* ========================================
+   3. 헤더 내부 컨테이너
+   ======================================== */
+.container {
+    /* Flexbox: 로고, 네비게이션, 버튼을 가로로 배치 */
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+    justify-content: space-between; /* 양 끝으로 분산 */
+
+    /* 크기 */
+    max-width: 1400px;
+    height: 100%;
+    margin: 0 auto; /* 중앙 정렬 */
+    padding: 0 40px;
+}
+
+/* ========================================
+   4. 로고 스타일 (▲ CINEMO)
+   ======================================== */
+.logo {
+    /* Flexbox: 삼각형과 텍스트를 가로로 배치 */
+    display: flex;
+    align-items: center;
+    gap: 12px; /* 삼각형과 텍스트 사이 간격 */
+
+    /* 링크 기본 스타일 제거 */
+    text-decoration: none;
+    color: #ffffff;
+
+    /* 커서 */
+    cursor: pointer;
+}
+
+/* 삼각형 아이콘 */
+.triangle {
+    font-size: 20px;
+    color: #ffffff;
+    /* 호버 효과 없음 (사용자 요청) */
+}
+
+/* CINEMO 텍스트 */
+.logoText {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    /* 호버 효과 없음 (사용자 요청) */
+}
+
+/* ========================================
+   5. 네비게이션 (데스크톱)
+   ======================================== */
+.nav {
+    /* Flexbox: Home, Search를 가로로 배치 */
+    display: flex;
+    align-items: center;
+    gap: 32px; /* 링크 사이 간격 */
+}
+
+/* 네비게이션 링크 기본 스타일 */
+.navLink {
+    /* 텍스트 */
+    font-size: 16px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    text-decoration: none;
+
+    /* 기본 투명도 */
+    opacity: 0.8;
+
+    /* 부드러운 전환 효과 */
+    transition: all 0.3s ease;
+
+    /* 상대 위치: Coming Soon 배지 배치용 */
+    position: relative;
+
+    /* 커서 */
+    cursor: pointer;
+}
+
+/* 호버 효과 */
+.navLink:hover:not(.disabled) {
+    opacity: 1;
+    color: #60a5fa; /* 파란색 */
+    transform: translateY(-2px); /* 살짝 위로 올라감 */
+}
+
+/* 활성화된 링크 (현재 페이지) */
+.navLink.active {
+    opacity: 1;
+    color: #e50914; /* 빨간색 */
+}
+
+/* 비활성화된 링크 (Search) */
+.navLink.disabled {
+    opacity: 0.4;
+    cursor: not-allowed; /* 금지 커서 */
+}
+
+/* Coming Soon 배지 */
+.comingSoon {
+    position: absolute;
+    top: -8px;
+    right: -70px;
+    font-size: 10px;
+    color: #fbbf24; /* 노란색 */
+    background: rgba(251, 191, 36, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap; /* 줄바꿈 방지 */
+}
+
+/* ========================================
+   6. 모바일 햄버거 메뉴 버튼
+   ======================================== */
+.menuButton {
+    /* 데스크톱에서는 숨김 */
+    display: none;
+
+    /* 버튼 스타일 제거 */
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    /* 크기 */
+    width: 40px;
+    height: 40px;
+}
+
+.hamburger {
+    font-size: 28px;
+    color: #ffffff;
+}
+
+/* ========================================
+   7. 모바일 메뉴 드로어
+   ======================================== */
+
+/* 어두운 오버레이 (배경) */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7); /* 70% 어둡게 */
+    z-index: 999; /* 헤더 바로 아래 */
+    animation: fadeIn 0.3s ease;
+}
+
+/* 슬라이드 메뉴 */
+.drawer {
+    /* 위치: 오른쪽에서 슬라이드 */
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 280px;
+
+    /* 배경 */
+    background: #1a1a1a;
+
+    /* z-index: 오버레이 위에 표시 */
+    z-index: 1001;
+
+    /* 내부 여백 */
+    padding: 80px 30px 30px;
+
+    /* 슬라이드 애니메이션 */
+    animation: slideIn 0.3s ease;
+
+    /* 그림자 */
+    box-shadow: -4px 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 닫기 버튼 */
+.closeButton {
+    /* 위치: 오른쪽 상단 */
+    position: absolute;
+    top: 20px;
+    right: 20px;
+
+    /* 버튼 스타일 */
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 28px;
+    cursor: pointer;
+
+    /* 크기 */
+    width: 40px;
+    height: 40px;
+
+    /* 전환 효과 */
+    transition: transform 0.2s ease;
+}
+
+.closeButton:hover {
+    transform: rotate(90deg); /* 회전 효과 */
+}
+
+/* 모바일 네비게이션 */
+.mobileNav {
+    display: flex;
+    flex-direction: column; /* 세로로 배치 */
+    gap: 24px;
+}
+
+/* 모바일 네비게이션 링크 */
+.mobileNavLink {
+    /* 텍스트 */
+    font-size: 18px;
+    font-weight: 500;
+    color: #ffffff;
+    text-decoration: none;
+
+    /* 간격 */
+    padding: 12px 16px;
+
+    /* 배경 */
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+
+    /* 전환 효과 */
+    transition: all 0.3s ease;
+
+    /* 상대 위치: Coming Soon 배지용 */
+    position: relative;
+}
+
+.mobileNavLink:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(8px); /* 오른쪽으로 살짝 이동 */
+}
+
+.mobileNavLink.disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ========================================
+   8. 애니메이션
+   ======================================== */
+
+/* 오버레이 페이드인 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* 드로어 슬라이드인 */
+@keyframes slideIn {
+    from {
+        transform: translateX(100%); /* 오른쪽 밖에서 시작 */
+    }
+    to {
+        transform: translateX(0); /* 제자리 */
+    }
+}
+
+/* ========================================
+   9. 반응형 디자인 (모바일)
+   ======================================== */
+@media (max-width: 768px) {
+    /* 헤더 높이 줄이기 */
+    .header {
+        height: 56px;
+    }
+
+    /* 컨테이너 패딩 줄이기 */
+    .container {
+        padding: 0 20px;
+    }
+
+    /* 로고 크기 줄이기 */
+    .logoText {
+        font-size: 20px;
+    }
+
+    .triangle {
+        font-size: 18px;
+    }
+
+    /* 데스크톱 네비게이션 숨기기 */
+    .nav {
+        display: none;
+    }
+
+    /* 햄버거 메뉴 버튼 표시 */
+    .menuButton {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}

@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from "react";
 import Movie from "../components/Movie";
+import Header from "../components/Header";
 import styles from "./Home.module.css";
 
 // ========================================
@@ -100,12 +101,21 @@ function Home() {
   };
 
   return (
-    <div className={styles.container}>
-      {loading ? (
-        <div className={styles.loading}>Loading...</div>
-      ) : (
-        <div>
-          <div className={styles.moviesGrid}>
+    <>
+      {/* ========================================
+          헤더 (상단 고정)
+          ======================================== */}
+      <Header />
+
+      {/* ========================================
+          메인 컨텐츠
+          ======================================== */}
+      <div className={styles.container}>
+        {loading ? (
+          <div className={styles.loading}>Loading...</div>
+        ) : (
+          <div>
+            <div className={styles.moviesGrid}>
             {movies.map((movie) => (
               <Movie  // pagenation
                 key={movie.id}
@@ -145,7 +155,8 @@ function Home() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

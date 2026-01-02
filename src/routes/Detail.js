@@ -6,6 +6,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Header from "../components/Header";
 import styles from "./Detail.module.css";
 
 // ========================================
@@ -63,6 +64,41 @@ function Detail() {
     };
 
     // ========================================
+    // 헬퍼 함수: 상영시간 포맷팅
+    // ========================================
+    const formatRuntime = (minutes) => {
+        /*
+            minutes: 분 단위 숫자 (예: 198)
+            반환값: "198 min (3h 18m)" 형태
+
+            Math.floor(): 소수점 버림 (내림)
+            예: Math.floor(3.9) → 3
+        */
+        if (!minutes) return "N/A";
+
+        const hours = Math.floor(minutes / 60);  // 시간 = 분 ÷ 60
+        const mins = minutes % 60;                // 나머지 분 = 분 % 60
+
+        return `${minutes} min (${hours}h ${mins}m)`;
+    };
+
+    // ========================================
+    // 헬퍼 함수: 수익 포맷팅
+    // ========================================
+    const formatRevenue = (amount) => {
+        /*
+            amount: 숫자 (예: 760400000)
+            반환값: "$760,400,000" 형태
+
+            toLocaleString('en-US'): 미국 형식으로 숫자 포맷팅 (쉼표 추가)
+            예: 1234567 → "1,234,567"
+        */
+        if (!amount || amount === 0) return "N/A";
+
+        return `$${amount.toLocaleString('en-US')}`;
+    };
+
+    // ========================================
     // 로딩 중 화면
     // ========================================
     if (loading) {
@@ -80,18 +116,26 @@ function Detail() {
     // 메인 렌더링
     // ========================================
     return (
-        <div>
+        <>
             {/* ========================================
-                1. 히어로 섹션 (Hero Section)
-                ========================================
-                - 배경 이미지
-                - 포스터
-                - 제목, 태그라인
-                - 평점
-                - 찜 버튼
-                - 뒤로가기 버튼
-            */}
-            <section className={styles.heroSection}>
+                헤더 (상단 고정)
+                ======================================== */}
+            <Header />
+
+            {/* ========================================
+                메인 컨텐츠
+                ======================================== */}
+            <div>
+                {/* ========================================
+                    1. 히어로 섹션 (Hero Section)
+                    ========================================
+                    - 배경 이미지
+                    - 포스터
+                    - 제목, 태그라인
+                    - 평점
+                    - 찜 버튼
+                */}
+                <section className={styles.heroSection}>
                 {/* 배경 이미지 (backdrop_path가 있을 때만 표시) */}
                 {movie.backdrop_path && (
                     <>
@@ -104,6 +148,32 @@ function Detail() {
                         <div className={styles.backdropOverlay}></div>
                     </>
                 )}
+
+                {/* 뒤로가기 버튼 */}
+                <button
+                    onClick={() => navigate(-1)} // 이전 페이지로 이동
+                    style={{
+                        position: 'absolute',
+                        top: '80px',       // 헤더(60px) + 여백(20px)
+                        left: '20px',
+                        background: 'rgba(0, 0, 0, 0.5)', // 반투명 검정 배경
+                        color: 'white',
+                        border: 'none',
+                        padding: '10px 20px',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        backdropFilter: 'blur(10px)', // 배경 흐림 효과
+                        transition: 'all 0.3s ease',
+                        zIndex: 10  // 다른 요소들 위에 표시
+                    }}
+                    // 마우스 올렸을 때 배경 더 어둡게
+                    onMouseEnter={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.8)'}
+                    // 마우스 뗐을 때 원래대로
+                    onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.5)'}
+                >
+                    ← 뒤로가기
+                </button>
 
                 {/* 히어로 컨텐츠 (포스터 + 정보) */}
                 <div className={styles.heroContent}>
@@ -179,31 +249,6 @@ function Detail() {
                                 {isWishlisted ? '❤️' : '🤍'}
                             </button>
                         </div>
-
-                        {/* 뒤로가기 버튼 */}
-                        <button
-                            onClick={() => navigate(-1)} // 이전 페이지로 이동
-                            style={{
-                                position: 'absolute',
-                                top: '20px',
-                                left: '20px',
-                                background: 'rgba(0, 0, 0, 0.5)', // 반투명 검정 배경
-                                color: 'white',
-                                border: 'none',
-                                padding: '10px 20px',
-                                borderRadius: '8px',
-                                cursor: 'pointer',
-                                fontSize: '16px',
-                                backdropFilter: 'blur(10px)', // 배경 흐림 효과
-                                transition: 'all 0.3s ease'
-                            }}
-                            // 마우스 올렸을 때 배경 더 어둡게
-                            onMouseEnter={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.8)'}
-                            // 마우스 뗐을 때 원래대로
-                            onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.5)'}
-                        >
-                            ← 뒤로가기
-                        </button>
                     </div>
                 </div>
             </section>
@@ -215,20 +260,88 @@ function Detail() {
                 - 상영시간
                 - 청불 여부
                 - 주요 장르
-                → 아직 미구현
             */}
             <section className={styles.infoBar}>
-                {/* TODO: 여기에 기본 정보 바 코드 작성 */}
+                {/* 개봉 연도 */}
+                {movie.release_date && (
+                    <span className={styles.infoItem}>
+                        {/*
+                            release_date 형식: "2025-12-17"
+                            split('-'): 문자열을 '-' 기준으로 나눔 → ["2025", "12", "17"]
+                            [0]: 첫 번째 요소 (연도)만 가져옴 → "2025"
+                        */}
+                        {movie.release_date.split('-')[0]}
+                    </span>
+                )}
+
+                {/* 구분선 | */}
+                {movie.release_date && movie.runtime && (
+                    <span className={styles.separator}>|</span>
+                )}
+
+                {/* 상영시간 */}
+                {movie.runtime && (
+                    <span className={styles.infoItem}>
+                        {/*
+                            runtime: 숫자로 분 단위 (예: 198)
+                            "분" 붙여서 표시 → "198분"
+                        */}
+                        {movie.runtime}분
+                    </span>
+                )}
+
+                {/* 청불 표시 (adult가 true일 때만) */}
+                {movie.adult && (
+                    <>
+                        {/* 구분선 | */}
+                        <span className={styles.separator}>|</span>
+                        {/* 19+ 표시 */}
+                        <span className={styles.infoAdult}>🔞 19+</span>
+                    </>
+                )}
+
+                {/* 모든 장르 표시 */}
+                {movie.genres && movie.genres.length > 0 && (
+                    <>
+                        {/* 구분선 | */}
+                        <span className={styles.separator}>|</span>
+                        {/*
+                            genres: 배열 (예: [{id: 878, name: "Science Fiction"}, ...])
+                            map(): 배열의 각 요소를 순회하면서 변환
+                            join(', '): 배열을 ", "로 연결해서 문자열로 만듦
+                            예: ["SF", "Adventure"] → "SF, Adventure"
+                        */}
+                        <span className={styles.infoItem}>
+                            {movie.genres.map(genre => genre.name).join(', ')}
+                        </span>
+                    </>
+                )}
             </section>
 
             {/* ========================================
                 3. 줄거리 (Overview)
                 ========================================
                 - 영화 줄거리 전체 텍스트
-                → 아직 미구현
             */}
             <section className={styles.overview}>
-                {/* TODO: 여기에 줄거리 코드 작성 */}
+                {/* 제목 */}
+                <h2 className={styles.sectionTitle}>Overview</h2>
+
+                {/* 줄거리 텍스트 */}
+                {movie.overview ? (
+                    <p className={styles.overviewText}>
+                        {/*
+                            overview: 영화 줄거리 텍스트
+                            예: "In the wake of the devastating war against..."
+                        */}
+                        {movie.overview}
+                    </p>
+                ) : (
+                    // overview가 없을 때 대체 텍스트
+                    <p className={styles.overviewText}>
+                        줄거리 정보가 없습니다.
+                    </p>
+                )}
             </section>
 
             {/* ========================================
@@ -236,20 +349,138 @@ function Detail() {
                 ========================================
                 - 원제, 개봉일, 상영시간, 장르
                 - 제작국가, 언어, 수익
-                → 아직 미구현
             */}
             <section className={styles.details}>
-                {/* TODO: 여기에 상세 정보 코드 작성 */}
+                <h2 className={styles.sectionTitle}>Details</h2>
+
+                <div className={styles.detailsGrid}>
+                    {/* Original Title */}
+                    {movie.original_title && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Original Title</span>
+                            <span className={styles.detailValue}>{movie.original_title}</span>
+                        </div>
+                    )}
+
+                    {/* Release Date */}
+                    {movie.release_date && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Release Date</span>
+                            <span className={styles.detailValue}>
+                                {/*
+                                    release_date: "2025-12-17"
+                                    → "December 17, 2025" 형태로 변환
+
+                                    new Date(): Date 객체 생성
+                                    toLocaleDateString('en-US'): 미국 날짜 형식으로 변환
+                                */}
+                                {new Date(movie.release_date).toLocaleDateString('en-US', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: 'numeric'
+                                })}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Runtime */}
+                    {movie.runtime && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Runtime</span>
+                            <span className={styles.detailValue}>
+                                {formatRuntime(movie.runtime)}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Country */}
+                    {movie.production_countries && movie.production_countries.length > 0 && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Country</span>
+                            <span className={styles.detailValue}>
+                                {/*
+                                    production_countries: 배열
+                                    첫 번째 국가만 표시
+                                */}
+                                {movie.production_countries[0].name}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Language */}
+                    {movie.spoken_languages && movie.spoken_languages.length > 0 && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Language</span>
+                            <span className={styles.detailValue}>
+                                {/*
+                                    spoken_languages: 배열
+                                    첫 번째 언어만 표시
+                                */}
+                                {movie.spoken_languages[0].english_name}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Revenue */}
+                    {movie.revenue && (
+                        <div className={styles.detailItem}>
+                            <span className={styles.detailLabel}>Revenue</span>
+                            <span className={styles.detailValue}>
+                                {formatRevenue(movie.revenue)}
+                            </span>
+                        </div>
+                    )}
+
+                    {/* Genres - 맨 아래, 2열 전체 차지 */}
+                    {movie.genres && movie.genres.length > 0 && (
+                        <div className={`${styles.detailItem} ${styles.genresItem}`}>
+                            <span className={styles.detailLabel}>Genres</span>
+                            <span className={styles.detailValue}>
+                                {movie.genres.map(genre => genre.name).join(', ')}
+                            </span>
+                        </div>
+                    )}
+                </div>
             </section>
 
             {/* ========================================
                 5. 제작사 정보 (Production Companies)
                 ========================================
                 - 제작사 로고 및 이름
-                → 아직 미구현
             */}
             <section className={styles.production}>
-                {/* TODO: 여기에 제작사 정보 코드 작성 */}
+                <h2 className={styles.sectionTitle}>Production Companies</h2>
+
+                {movie.production_companies && movie.production_companies.length > 0 ? (
+                    <div className={styles.companiesGrid}>
+                        {/*
+                            map(): 배열의 각 제작사를 순회
+                            각 제작사마다 카드 생성
+                        */}
+                        {movie.production_companies.map((company) => (
+                            <div key={company.id} className={styles.companyCard}>
+                                {company.logo_path ? (
+                                    // 로고가 있으면 이미지 표시
+                                    <>
+                                        <img
+                                            src={`${IMG_BASE_URL}${company.logo_path}`}
+                                            alt={company.name}
+                                            className={styles.companyLogo}
+                                        />
+                                        <p className={styles.companyName}>{company.name}</p>
+                                    </>
+                                ) : (
+                                    // 로고가 없으면 이름만 표시
+                                    <div className={styles.companyNameOnly}>
+                                        <span>{company.name}</span>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className={styles.noData}>No production company information available</p>
+                )}
             </section>
 
             {/* ========================================
@@ -261,7 +492,8 @@ function Detail() {
             <section className={styles.collection}>
                 {/* TODO: 여기에 시리즈 정보 코드 작성 */}
             </section>
-        </div>
+            </div>
+        </>
     );
 }
 
