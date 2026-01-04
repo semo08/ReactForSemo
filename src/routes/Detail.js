@@ -52,6 +52,7 @@ function Detail() {
         };
 
         getMovie(); // 함수 실행
+        console.log(movie);
     }, [id]); // id가 바뀔 때마다 다시 실행 (다른 영화로 이동 시)
 
     // ========================================
@@ -384,7 +385,7 @@ function Detail() {
                     )}
 
                     {/* Runtime */}
-                    {movie.runtime && (
+                    {movie.runtime > 0 && (
                         <div className={styles.detailItem}>
                             <span className={styles.detailLabel}>Runtime</span>
                             <span className={styles.detailValue}>
@@ -422,11 +423,11 @@ function Detail() {
                     )}
 
                     {/* Revenue */}
-                    {movie.revenue && (
+                    {movie.revenue > 0 && (
                         <div className={styles.detailItem}>
                             <span className={styles.detailLabel}>Revenue</span>
                             <span className={styles.detailValue}>
-                                {formatRevenue(movie.revenue)}
+                                {movie.revenue ? formatRevenue(movie.revenue) : null}
                             </span>
                         </div>
                     )}
@@ -487,11 +488,53 @@ function Detail() {
                 6. 시리즈 정보 (Collection)
                 ========================================
                 - 영화가 시리즈의 일부인 경우만 표시
-                → 아직 미구현
             */}
-            <section className={styles.collection}>
-                {/* TODO: 여기에 시리즈 정보 코드 작성 */}
-            </section>
+            {movie.belongs_to_collection && (
+                <section className={styles.collection}>
+                    {/* 제목 */}
+                    <h2 className={styles.sectionTitle}>Collection</h2>
+
+                    <div className={styles.collectionCard}>
+                        {/* 배경 이미지 (있으면 표시) */}
+                        {movie.belongs_to_collection.backdrop_path && (
+                            <div className={styles.collectionBackdrop}>
+                                <img
+                                    src={`${IMG_BASE_URL}${movie.belongs_to_collection.backdrop_path}`}
+                                    alt={movie.belongs_to_collection.name}
+                                    className={styles.backdropImage}
+                                />
+                                <div className={styles.collectionOverlay}></div>
+                            </div>
+                        )}
+
+                        {/* 컬렉션 정보 */}
+                        <div className={styles.collectionContent}>
+                            {/* 포스터 이미지 (있으면 표시) */}
+                            {movie.belongs_to_collection.poster_path && (
+                                <img
+                                    src={`${IMG_BASE_URL}${movie.belongs_to_collection.poster_path}`}
+                                    alt={movie.belongs_to_collection.name}
+                                    className={styles.collectionPoster}
+                                />
+                            )}
+
+                            {/* 컬렉션 정보 */}
+                            <div className={styles.collectionInfo}>
+                                <h3 className={styles.collectionName}>
+                                    {/*
+                                        belongs_to_collection.name: 시리즈 이름
+                                        예: "Avatar Collection"
+                                    */}
+                                    {movie.belongs_to_collection.name}
+                                </h3>
+                                <p className={styles.collectionDescription}>
+                                    This movie is part of a collection. Click to explore more movies in this series!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
             </div>
         </>
     );

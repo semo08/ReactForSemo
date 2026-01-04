@@ -488,11 +488,6 @@
   .detailValue {
     font-size: 14px;
   }
-
-  /* Reduce hover effects on mobile for better touch experience */
-  .detailItem:hover {
-    transform: none;
-  }
 }
 
 /* ========================================
@@ -534,9 +529,6 @@
   /* Size */
   min-width: 160px;
   min-height: 120px;
-
-  /* Smooth transitions */
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .companyLogo {
@@ -599,6 +591,151 @@
   .companyLogo {
     max-width: 100px;
     max-height: 50px;
+  }
+}
+
+/* ========================================
+   Collection (시리즈 정보)
+   ======================================== */
+.collection {
+  background-color: #1a1a1a;
+  padding: 50px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.collectionCard {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  overflow: hidden;
+  min-height: 280px;
+}
+
+.collectionBackdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+.backdropImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.3;
+}
+
+.collectionOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(15, 15, 15, 0.95) 0%,
+    rgba(15, 15, 15, 0.7) 100%
+  );
+}
+
+.collectionContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  padding: 32px;
+}
+
+.collectionPoster {
+  width: 180px;
+  height: 270px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.collectionInfo {
+  flex: 1;
+  color: #ffffff;
+}
+
+.collectionName {
+  font-size: 32px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: #ffffff;
+  line-height: 1.3;
+}
+
+.collectionDescription {
+  font-size: 16px;
+  color: #cccccc;
+  line-height: 1.6;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+/* Responsive - Tablet */
+@media (max-width: 1024px) {
+  .collection {
+    padding: 40px 30px;
+  }
+
+  .collectionContent {
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .collectionPoster {
+    width: 150px;
+    height: 225px;
+  }
+
+  .collectionName {
+    font-size: 28px;
+  }
+}
+
+/* Responsive - Mobile */
+@media (max-width: 768px) {
+  .collection {
+    padding: 40px 20px;
+  }
+
+  .collectionCard {
+    min-height: auto;
+  }
+
+  .collectionContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    padding: 24px 20px;
+  }
+
+  .collectionPoster {
+    width: 160px;
+    height: 240px;
+  }
+
+  .collectionName {
+    font-size: 24px;
+  }
+
+  .collectionDescription {
+    font-size: 14px;
   }
 }
 
