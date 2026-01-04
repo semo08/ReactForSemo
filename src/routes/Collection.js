@@ -59,7 +59,7 @@ function Collection() {
                 // 에러 체크 (404 등)
                 if (json.success === false) {
                     console.error("Collection을 찾을 수 없습니다:", json);
-                    alert("Collection을 찾을 수 없습니다.");
+                    alert("Collection not found.");
                     navigate(-1); // 뒤로가기
                     return;
                 }
@@ -67,7 +67,7 @@ function Collection() {
                 setCollection(json);
             } catch (error) {
                 console.error("Collection 정보를 불러오는데 실패했습니다:", error);
-                alert("Collection 정보를 불러오는데 실패했습니다.");
+                alert("Failed to load collection information.");
                 navigate(-1);
             } finally {
                 setLoading(false);

@@ -110,7 +110,7 @@ function Detail() {
     // 영화 데이터가 없을 때 (에러 처리)
     // ========================================
     if (!movie) {
-        return <div className={styles.loading}>영화 정보를 찾을 수 없습니다</div>;
+        return <div className={styles.loading}>Movie not found</div>;
     }
 
     // ========================================
@@ -173,7 +173,7 @@ function Detail() {
                     // 마우스 뗐을 때 원래대로
                     onMouseLeave={(e) => e.target.style.background = 'rgba(0, 0, 0, 0.5)'}
                 >
-                    ← 뒤로가기
+                    ← Back
                 </button>
 
                 {/* 히어로 컨텐츠 (포스터 + 정보) */}
@@ -244,7 +244,7 @@ function Detail() {
                             <button
                                 className={`${styles.wishlistButton} ${isWishlisted ? styles.active : ''}`}
                                 onClick={handleWishlist}
-                                aria-label="찜하기" // 접근성: 스크린 리더가 읽어줌
+                                aria-label="Add to wishlist" // 접근성: 스크린 리더가 읽어줌
                             >
                                 {/* 찜 했으면 빨간 하트, 안 했으면 흰 하트 */}
                                 {isWishlisted ? '❤️' : '🤍'}
@@ -340,7 +340,7 @@ function Detail() {
                 ) : (
                     // overview가 없을 때 대체 텍스트
                     <p className={styles.overviewText}>
-                        줄거리 정보가 없습니다.
+                        No overview available.
                     </p>
                 )}
             </section>

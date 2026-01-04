@@ -293,10 +293,10 @@ function Header() {
                                 // 비로그인 상태: 로그인 안내
                                 <div className={styles.mobileLoginArea}>
                                     <p className={styles.mobileLoginText}>
-                                        로그인이 필요합니다
+                                        Login required
                                     </p>
                                     <p className={styles.mobileLoginSubText}>
-                                        데스크톱에서 로그인해주세요
+                                        Please login on desktop
                                     </p>
                                 </div>
                             )}

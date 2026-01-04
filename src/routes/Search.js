@@ -49,7 +49,7 @@ function Search() {
 
         if (!query.trim()) {
             // 빈 문자열 체크 (.trim()은 공백 제거)
-            alert("검색어를 입력해주세요!");
+            alert("Please enter a search term!");
             return;
         }
 
@@ -76,7 +76,7 @@ function Search() {
             setTotalResults(json.total_results || 0); // 총 개수 저장
         } catch (error) {
             console.error("검색 실패:", error);
-            alert("검색 중 오류가 발생했습니다.");
+            alert("An error occurred during search.");
         } finally {
             setLoading(false); // 로딩 종료
         }
