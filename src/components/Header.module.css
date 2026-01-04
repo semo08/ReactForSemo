@@ -92,10 +92,10 @@
    5. 네비게이션 (데스크톱)
    ======================================== */
 .nav {
-    /* Flexbox: Home, Search를 가로로 배치 */
+    /* Flexbox: Home, Search, 로그인을 가로로 배치 */
     display: flex;
     align-items: center;
-    gap: 32px; /* 링크 사이 간격 */
+    gap: 20px; /* 링크 사이 간격 (32px → 20px로 줄임) */
 }
 
 /* 네비게이션 링크 기본 스타일 */
@@ -338,4 +338,183 @@
         align-items: center;
         justify-content: center;
     }
+}
+
+/* ========================================
+   10. 로그인 / 프로필 영역
+   ======================================== */
+
+/* 데스크톱 프로필 영역 (로그인 상태) */
+.profileArea {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    transition: all 0.3s ease;
+}
+
+.profileArea:hover {
+    border-color: rgba(229, 9, 20, 0.5);
+    background: linear-gradient(
+        135deg,
+        rgba(229, 9, 20, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+}
+
+.profileImage {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    object-fit: cover;
+}
+
+.userName {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logoutButton {
+    background: rgba(229, 9, 20, 0.8);
+    border: none;
+    color: #ffffff;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logoutButton:hover {
+    background: #e50914;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+}
+
+/* 데스크톱 로그인 영역 (비로그인 상태) */
+.loginArea {
+    display: flex;
+    align-items: center;
+}
+
+/* Google 로그인 버튼 커스터마이징 */
+.googleLoginButton {
+    /* 버튼 크기를 텍스트 길이에 맞게 */
+    width: auto;
+
+    /* 최소한의 스타일만 */
+    transition: all 0.3s ease;
+}
+
+.googleLoginButton:hover {
+    /* 호버 시 살짝만 강조 */
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* ========================================
+   11. 모바일 로그인 / 프로필 영역
+   ======================================== */
+
+/* 모바일 프로필 영역 */
+.mobileProfileArea {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    background: linear-gradient(
+        135deg,
+        rgba(229, 9, 20, 0.1) 0%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    border-radius: 12px;
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    margin-top: 12px;
+}
+
+.mobileUserInfo {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.mobileProfileImage {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid rgba(229, 9, 20, 0.5);
+    object-fit: cover;
+}
+
+.mobileUserText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    flex: 1;
+}
+
+.mobileUserName {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.mobileUserEmail {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.mobileLogoutButton {
+    width: 100%;
+    background: rgba(229, 9, 20, 0.8);
+    border: none;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.mobileLogoutButton:hover {
+    background: #e50914;
+}
+
+/* 모바일 로그인 영역 (비로그인 상태) */
+.mobileLoginArea {
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    margin-top: 12px;
+}
+
+.mobileLoginText {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+}
+
+.mobileLoginSubText {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0;
 }

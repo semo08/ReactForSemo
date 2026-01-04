@@ -79,7 +79,7 @@ function Home() {
 
   };
   // ========================================
-  // 브라우저 기본 스크롤 복원 비활성화
+  // 브라우저 기본 스크롤 복원 비활성화 + 즉시 스크롤 복원
   // ========================================
   useEffect(() => {
     /*
@@ -93,6 +93,19 @@ function Home() {
     */
     if ('scrollRestoration' in window.history) {
       window.history.scrollRestoration = 'manual';
+    }
+
+    /*
+      즉시 스크롤 위치 복원!
+      - 데이터 로드 전에 먼저 스크롤 위치를 설정
+      - 깜빡임 없이 바로 이전 위치로 이동
+      - 나중에 데이터가 로드되면 자연스럽게 컨텐츠가 채워짐
+    */
+    const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
+    if (savedScrollPosition) {
+      // 즉시 스크롤 (setTimeout 없이!)
+      window.scrollTo(0, parseInt(savedScrollPosition));
+      console.log('⚡ 즉시 스크롤 복원:', savedScrollPosition);
     }
   }, []); // 컴포넌트 mount 시 한 번만 실행
 
@@ -145,52 +158,32 @@ function Home() {
   }, []); // 빈 배열: 컴포넌트 mount/unmount 시에만 실행
 
   // ========================================
-  // 스크롤 위치 복원 (영화 데이터 로드 후)
+  // 스크롤 위치 미세 조정 (데이터 로드 후)
   // ========================================
   useEffect(() => {
     /*
-      스크롤 복원 조건:
-      1. loading이 false여야 함 (데이터 로드 완료)
-      2. movies 배열에 데이터가 있어야 함 (렌더링할 컨텐츠 존재)
-
-      왜 이렇게?
-      - 영화 카드가 화면에 렌더링된 후에 스크롤해야 정확한 위치로 이동
-      - 데이터가 없는 상태에서 스크롤하면 스크롤할 컨텐츠가 없어서 실패
+      데이터가 로드된 후 스크롤 위치를 한 번 더 확인
+      - 즉시 복원으로 대부분 해결되지만, 혹시 모를 경우를 대비
+      - 데이터 로드 후 DOM이 완전히 렌더링되면 정확한 위치로 재조정
     */
     if (!loading && movies.length > 0) {
-      // sessionStorage에서 저장된 스크롤 위치 가져오기
       const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
 
-      console.log('🔍 스크롤 복원 체크:', {
-        loading,
-        moviesCount: movies.length,
-        savedScrollPosition
-      });
-
       if (savedScrollPosition) {
-        /*
-          setTimeout을 사용하는 이유:
-          1. loading이 false가 되어도 DOM 렌더링은 조금 더 시간이 걸림
-          2. 브라우저가 영화 카드들을 화면에 그리는 동안 잠깐 기다림
-          3. React Router가 뒤로가기 시 자동으로 스크롤을 맨 위로 올리는데,
-             그것보다 늦게 실행되도록 시간을 늘림 (100ms → 300ms)
-        */
+        // 짧은 delay로 DOM 렌더링 완료 후 미세 조정
         setTimeout(() => {
           const targetPosition = parseInt(savedScrollPosition);
-          console.log('📜 스크롤 이동 시도:', targetPosition);
+          const currentPosition = window.scrollY;
 
-          window.scrollTo(0, targetPosition);
+          // 현재 위치와 목표 위치가 다르면 재조정
+          if (Math.abs(currentPosition - targetPosition) > 10) {
+            window.scrollTo(0, targetPosition);
+            console.log('🔧 스크롤 위치 미세 조정:', currentPosition, '→', targetPosition);
+          }
 
-          // 실제로 스크롤이 이동했는지 확인
-          setTimeout(() => {
-            console.log('📍 현재 스크롤 위치:', window.scrollY);
-          }, 50);
-
-          // ✅ 복원 후 sessionStorage에서 삭제
-          // 이렇게 하면 페이지 버튼 클릭 시에는 복원하지 않고,
-          // 뒤로가기로 돌아왔을 때만 한 번만 복원됨
+          // 복원 완료 후 sessionStorage에서 삭제
           sessionStorage.removeItem('homeScrollPosition');
-        }, 300); // 100ms → 300ms로 증가
+        }, 50); // 매우 짧은 delay
       }
     }
   }, [loading, movies]); // loading과 movies가 변경될 때마다 실행
@@ -232,8 +225,10 @@ function Home() {
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
+              className={styles.prevButton}
             >
-              Back
+              <span className={styles.buttonText}>Back</span>
+              <span className={styles.buttonArrow}>←</span>
             </button>
 
             {[...Array(totalPages)].map((_, index) => (
@@ -249,8 +244,10 @@ function Home() {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
+              className={styles.nextButton}
             >
-              Next
+              <span className={styles.buttonText}>Next</span>
+              <span className={styles.buttonArrow}>→</span>
             </button>
           </div>
         </div>

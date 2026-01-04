@@ -60,6 +60,15 @@
   transition: all 0.3s ease;
 }
 
+/* 데스크톱: 텍스트 표시, 화살표 숨김 */
+.buttonArrow {
+  display: none;
+}
+
+.buttonText {
+  display: inline;
+}
+
 .pagination button:hover:not(:disabled) {
   background-color: #e50914;
   border-color: #e50914;
@@ -91,5 +100,27 @@
     height: 40px;
     padding: 8px 12px;
     font-size: 14px;
+  }
+
+  /* 모바일: 텍스트 숨기고 화살표만 표시 */
+  .buttonText {
+    display: none;
+  }
+
+  .buttonArrow {
+    display: inline;
+    font-size: 18px;
+  }
+
+  /* Back/Next 버튼 크기 조정 */
+  .prevButton,
+  .nextButton {
+    min-width: 44px;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }

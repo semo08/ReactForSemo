@@ -7,8 +7,24 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import styles from './Header.module.css';
+import { useAuth } from '../contexts/AuthContext';
+
+// Google OAuth Client ID (.env에서 가져오기)
+// .env 파일에 REACT_APP_GOOGLE_CLIENT_ID="your-client-id" 형식으로 저장
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
 
 function Header() {
+    // ========================================
+    // 0. 로그인 상태 관리
+    // ========================================
+    const { user, login, logout, isLoggedIn } = useAuth();
+    /*
+        user: 로그인한 사용자 정보 객체 (또는 null)
+        login: 로그인 함수
+        logout: 로그아웃 함수
+        isLoggedIn: 로그인 여부 (true/false)
+    */
+
     // ========================================
     // 1. 현재 페이지 위치 감지
     // ========================================
@@ -53,6 +69,58 @@ function Header() {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []); // 빈 배열: 컴포넌트 mount 시 1회만 실행
+
+    // ========================================
+    // Google OAuth 초기화
+    // ========================================
+    useEffect(() => {
+        /*
+            Google Identity Services 초기화
+            - Google Script가 로드된 후 실행되어야 함
+            - 로그인 버튼 렌더링
+        */
+
+        // Google Script가 로드되었는지 확인
+        if (window.google) {
+            window.google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse,
+            });
+
+            // 로그인 버튼 렌더링 (loginBtn ID를 가진 요소에)
+            const loginButton = document.getElementById("loginBtn");
+            if (loginButton) {
+                window.google.accounts.id.renderButton(loginButton, {
+                    theme: "filled_black",   // 다크 테마 (어두운 배경)
+                    size: "medium",          // 중간 크기
+                    shape: "rectangular",    // 사각형 (기본)
+                    text: "signin",          // "Sign in" (짧은 텍스트)
+                    logo_alignment: "left",  // 로고 왼쪽 정렬
+                });
+            }
+        } else {
+            console.warn("Google Identity Services script가 로드되지 않았습니다.");
+        }
+    }, []); // 컴포넌트 mount 시 1회만 실행
+
+    // ========================================
+    // Google OAuth 응답 처리 함수
+    // ========================================
+    const handleCredentialResponse = (response) => {
+        /*
+            Google 로그인 성공 시 호출되는 함수
+            response.credential: JWT 토큰 (사용자 정보 포함)
+        */
+        console.log("✅ Google 로그인 응답 받음!");
+
+        // AuthContext의 login 함수 호출
+        // → 토큰 디코딩 + 사용자 정보 저장 + localStorage 저장
+        const userData = login(response.credential);
+
+        if (userData) {
+            console.log("👤 로그인 완료:", userData.name);
+        }
+    };
 
     // ========================================
     // 5. 모바일 메뉴 토글 함수
@@ -113,14 +181,32 @@ function Header() {
                                 styles.disabled: 회색으로 표시
                             */}
                             Search
-                            <span className={styles.comingSoon}>Coming Soon</span>
                         </span>
 
-                        {/* Profile 링크 (비활성화) */}
-                        <span className={`${styles.navLink} ${styles.disabled}`}>
-                            Profile
-                            <span className={styles.comingSoon}>Coming Soon</span>
-                        </span>
+                        {/* 로그인 / 프로필 영역 */}
+                        {isLoggedIn ? (
+                            // 로그인 상태: 프로필 + 로그아웃
+                            <div className={styles.profileArea}>
+                                <img
+                                    src={user.picture}
+                                    alt={user.name}
+                                    className={styles.profileImage}
+                                    title={user.name}
+                                />
+                                <span className={styles.userName}>{user.name}</span>
+                                <button
+                                    onClick={logout}
+                                    className={styles.logoutButton}
+                                >
+                                    Logout
+                                </button>
+                            </div>
+                        ) : (
+                            // 비로그인 상태: 커스텀 로그인 버튼
+                            <div className={styles.loginArea}>
+                                <div id="loginBtn" className={styles.googleLoginButton}></div>
+                            </div>
+                        )}
                     </nav>
 
                     {/* ========================================
@@ -173,12 +259,44 @@ function Header() {
                             </Link>
                             <span className={`${styles.mobileNavLink} ${styles.disabled}`}>
                                 🔍 Search
-                                <span className={styles.comingSoon}>Coming Soon</span>
                             </span>
-                            <span className={`${styles.mobileNavLink} ${styles.disabled}`}>
-                                👤 Profile
-                                <span className={styles.comingSoon}>Coming Soon</span>
-                            </span>
+
+                            {/* 로그인 / 프로필 영역 (모바일) */}
+                            {isLoggedIn ? (
+                                // 로그인 상태: 프로필 정보 + 로그아웃
+                                <div className={styles.mobileProfileArea}>
+                                    <div className={styles.mobileUserInfo}>
+                                        <img
+                                            src={user.picture}
+                                            alt={user.name}
+                                            className={styles.mobileProfileImage}
+                                        />
+                                        <div className={styles.mobileUserText}>
+                                            <span className={styles.mobileUserName}>{user.name}</span>
+                                            <span className={styles.mobileUserEmail}>{user.email}</span>
+                                        </div>
+                                    </div>
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            toggleMenu();
+                                        }}
+                                        className={styles.mobileLogoutButton}
+                                    >
+                                        🚪 Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                // 비로그인 상태: 로그인 안내
+                                <div className={styles.mobileLoginArea}>
+                                    <p className={styles.mobileLoginText}>
+                                        로그인이 필요합니다
+                                    </p>
+                                    <p className={styles.mobileLoginSubText}>
+                                        데스크톱에서 로그인해주세요
+                                    </p>
+                                </div>
+                            )}
                         </nav>
                     </div>
                 </>

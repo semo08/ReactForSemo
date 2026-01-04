@@ -5,7 +5,7 @@
 // TMDb API에서 영화 데이터를 가져와서 표시
 
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import Header from "../components/Header";
 import styles from "./Detail.module.css";
 
@@ -276,12 +276,12 @@ function Detail() {
                 )}
 
                 {/* 구분선 | */}
-                {movie.release_date && movie.runtime && (
+                {movie.release_date > 0 && movie.runtime && (
                     <span className={styles.separator}>|</span>
                 )}
 
                 {/* 상영시간 */}
-                {movie.runtime && (
+                {movie.runtime > 0 && (
                     <span className={styles.infoItem}>
                         {/*
                             runtime: 숫자로 분 단위 (예: 198)
@@ -494,45 +494,55 @@ function Detail() {
                     {/* 제목 */}
                     <h2 className={styles.sectionTitle}>Collection</h2>
 
-                    <div className={styles.collectionCard}>
-                        {/* 배경 이미지 (있으면 표시) */}
-                        {movie.belongs_to_collection.backdrop_path && (
-                            <div className={styles.collectionBackdrop}>
-                                <img
-                                    src={`${IMG_BASE_URL}${movie.belongs_to_collection.backdrop_path}`}
-                                    alt={movie.belongs_to_collection.name}
-                                    className={styles.backdropImage}
-                                />
-                                <div className={styles.collectionOverlay}></div>
-                            </div>
-                        )}
-
-                        {/* 컬렉션 정보 */}
-                        <div className={styles.collectionContent}>
-                            {/* 포스터 이미지 (있으면 표시) */}
-                            {movie.belongs_to_collection.poster_path && (
-                                <img
-                                    src={`${IMG_BASE_URL}${movie.belongs_to_collection.poster_path}`}
-                                    alt={movie.belongs_to_collection.name}
-                                    className={styles.collectionPoster}
-                                />
+                    {/*
+                        Link로 감싸서 클릭 시 Collection 페이지로 이동
+                        to: /collection/{collection_id}
+                        예: /collection/87096 (Avatar Collection)
+                    */}
+                    <Link
+                        to={`/collection/${movie.belongs_to_collection.id}`}
+                        className={styles.collectionLink}
+                    >
+                        <div className={styles.collectionCard}>
+                            {/* 배경 이미지 (있으면 표시) */}
+                            {movie.belongs_to_collection.backdrop_path && (
+                                <div className={styles.collectionBackdrop}>
+                                    <img
+                                        src={`${IMG_BASE_URL}${movie.belongs_to_collection.backdrop_path}`}
+                                        alt={movie.belongs_to_collection.name}
+                                        className={styles.backdropImage}
+                                    />
+                                    <div className={styles.collectionOverlay}></div>
+                                </div>
                             )}
 
                             {/* 컬렉션 정보 */}
-                            <div className={styles.collectionInfo}>
-                                <h3 className={styles.collectionName}>
-                                    {/*
-                                        belongs_to_collection.name: 시리즈 이름
-                                        예: "Avatar Collection"
-                                    */}
-                                    {movie.belongs_to_collection.name}
-                                </h3>
-                                <p className={styles.collectionDescription}>
-                                    This movie is part of a collection. Click to explore more movies in this series!
-                                </p>
+                            <div className={styles.collectionContent}>
+                                {/* 포스터 이미지 (있으면 표시) */}
+                                {movie.belongs_to_collection.poster_path && (
+                                    <img
+                                        src={`${IMG_BASE_URL}${movie.belongs_to_collection.poster_path}`}
+                                        alt={movie.belongs_to_collection.name}
+                                        className={styles.collectionPoster}
+                                    />
+                                )}
+
+                                {/* 컬렉션 정보 */}
+                                <div className={styles.collectionInfo}>
+                                    <h3 className={styles.collectionName}>
+                                        {/*
+                                            belongs_to_collection.name: 시리즈 이름
+                                            예: "Avatar Collection"
+                                        */}
+                                        {movie.belongs_to_collection.name}
+                                    </h3>
+                                    <p className={styles.collectionDescription}>
+                                        This movie is part of a collection. Click to explore more movies in this series!
+                                    </p>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </Link>
                 </section>
             )}
             </div>

@@ -1,0 +1,219 @@
+/* ========================================
+   Loading
+   ======================================== */
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* ========================================
+   Hero Section
+   ======================================== */
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 60vh;
+  overflow: hidden;
+  background-color: #0f0f0f;
+}
+
+.backdrop {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.backdropOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(15, 15, 15, 0.3) 0%,
+    rgba(15, 15, 15, 0.7) 50%,
+    rgba(15, 15, 15, 1) 100%
+  );
+  z-index: 1;
+}
+
+.backButton {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.backButton:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 40px 60px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.poster {
+  width: 300px;
+  height: 450px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  flex-shrink: 0;
+}
+
+.collectionInfo {
+  flex: 1;
+  color: #ffffff;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  line-height: 1.2;
+  color: #ffffff;
+}
+
+.overview {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #cccccc;
+  margin: 0 0 16px 0;
+  letter-spacing: 0.3px;
+}
+
+.movieCount {
+  font-size: 20px;
+  font-weight: 600;
+  color: #e50914;
+  margin: 0;
+}
+
+/* ========================================
+   Movies Section
+   ======================================== */
+.moviesSection {
+  background-color: #0f0f0f;
+  padding: 60px 40px;
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  font-size: 28px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 32px 0;
+  padding-left: 16px;
+  border-left: 4px solid #e50914;
+}
+
+.moviesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* ========================================
+   Responsive - Tablet
+   ======================================== */
+@media (max-width: 1024px) {
+  .heroContent {
+    padding: 80px 30px 50px;
+    gap: 30px;
+  }
+
+  .poster {
+    width: 240px;
+    height: 360px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .overview {
+    font-size: 16px;
+  }
+
+  .moviesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ========================================
+   Responsive - Mobile
+   ======================================== */
+@media (max-width: 768px) {
+  .heroContent {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 80px 20px 40px;
+    gap: 20px;
+  }
+
+  .poster {
+    width: 200px;
+    height: 300px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .overview {
+    font-size: 14px;
+  }
+
+  .movieCount {
+    font-size: 16px;
+  }
+
+  .moviesSection {
+    padding: 40px 20px;
+  }
+
+  .sectionTitle {
+    font-size: 24px;
+    padding-left: 12px;
+    border-left-width: 3px;
+  }
+
+  .moviesGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .backButton {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
