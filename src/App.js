@@ -7,6 +7,7 @@ import {
 import Detail from "./routes/Detail";
 import Home from "./routes/Home";
 import Collection from "./routes/Collection";
+import Search from "./routes/Search";
 import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
@@ -20,6 +21,9 @@ function App() {
 
           {/* 컬렉션 페이지 */}
           <Route path="/collection/:id" element={<Collection />} />
+
+          {/* 검색 페이지 */}
+          <Route path="/search" element={<Search />} />
 
           {/* 홈 페이지 */}
           <Route path="/" element={<Home />} />

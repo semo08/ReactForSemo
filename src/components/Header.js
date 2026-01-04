@@ -174,14 +174,13 @@ function Header() {
                             Home
                         </Link>
 
-                        {/* Search 링크 (비활성화) */}
-                        <span className={`${styles.navLink} ${styles.disabled}`}>
-                            {/*
-                                span: 클릭 불가능 (Link가 아님)
-                                styles.disabled: 회색으로 표시
-                            */}
+                        {/* Search 링크 */}
+                        <Link
+                            to="/search"
+                            className={`${styles.navLink} ${location.pathname === '/search' ? styles.active : ''}`}
+                        >
                             Search
-                        </span>
+                        </Link>
 
                         {/* 로그인 / 프로필 영역 */}
                         {isLoggedIn ? (
@@ -257,9 +256,13 @@ function Header() {
                             >
                                 🏠 Home
                             </Link>
-                            <span className={`${styles.mobileNavLink} ${styles.disabled}`}>
+                            <Link
+                                to="/search"
+                                className={styles.mobileNavLink}
+                                onClick={toggleMenu}
+                            >
                                 🔍 Search
-                            </span>
+                            </Link>
 
                             {/* 로그인 / 프로필 영역 (모바일) */}
                             {isLoggedIn ? (

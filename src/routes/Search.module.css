@@ -1,0 +1,211 @@
+/* ========================================
+   Container
+   ======================================== */
+.container {
+  min-height: 100vh;
+  background-color: #0f0f0f;
+  padding: 100px 20px 40px; /* 헤더 높이만큼 위 여백 */
+}
+
+/* ========================================
+   Search Section
+   ======================================== */
+.searchSection {
+  max-width: 800px;
+  margin: 0 auto 60px;
+  text-align: center;
+}
+
+.title {
+  font-size: 48px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 32px 0;
+  background: linear-gradient(135deg, #e50914 0%, #ff6b6b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 검색 폼 */
+.searchForm {
+  display: flex;
+  gap: 12px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  transition: all 0.3s ease;
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: #e50914;
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.searchButton {
+  padding: 16px 32px;
+  background: linear-gradient(135deg, #e50914 0%, #ff2a2a 100%);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.searchButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(229, 9, 20, 0.4);
+}
+
+.searchButton:active {
+  transform: translateY(0);
+}
+
+/* ========================================
+   Loading
+   ======================================== */
+.loading {
+  text-align: center;
+  padding: 80px 20px;
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* ========================================
+   Results Section
+   ======================================== */
+.resultsSection {
+  max-width: 1600px;
+  margin: 0 auto;
+}
+
+.resultsTitle {
+  font-size: 24px;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 32px 16px;
+  padding-left: 16px;
+  border-left: 4px solid #e50914;
+}
+
+.moviesGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+}
+
+/* 검색 결과 없음 */
+.noResults {
+  text-align: center;
+  padding: 80px 20px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.noResults p:first-child {
+  font-size: 48px;
+  margin: 0 0 16px 0;
+}
+
+.noResults p:last-child {
+  font-size: 18px;
+  margin: 0;
+}
+
+/* ========================================
+   Initial State (검색 전)
+   ======================================== */
+.initialState {
+  text-align: center;
+  padding: 120px 20px;
+}
+
+.initialText {
+  font-size: 32px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 16px 0;
+}
+
+.initialSubText {
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0;
+}
+
+/* ========================================
+   Responsive - Tablet
+   ======================================== */
+@media (max-width: 1024px) {
+  .title {
+    font-size: 36px;
+  }
+
+  .moviesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+}
+
+/* ========================================
+   Responsive - Mobile
+   ======================================== */
+@media (max-width: 768px) {
+  .container {
+    padding: 80px 20px 40px;
+  }
+
+  .title {
+    font-size: 28px;
+    margin: 0 0 24px 0;
+  }
+
+  .searchForm {
+    flex-direction: column;
+  }
+
+  .searchButton {
+    width: 100%;
+  }
+
+  .resultsTitle {
+    font-size: 18px;
+    margin: 0 0 24px 0;
+  }
+
+  .moviesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .initialText {
+    font-size: 24px;
+  }
+
+  .initialSubText {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .moviesGrid {
+    grid-template-columns: 1fr;
+  }
+}
