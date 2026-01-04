@@ -4,7 +4,6 @@
 // 사용자가 검색어를 입력하면 TMDb API로 영화를 검색
 
 import { useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Movie from "../components/Movie";
 import styles from "./Search.module.css";
@@ -24,18 +23,6 @@ function Search() {
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [searched, setSearched] = useState(false); // 검색 실행 여부
     const [totalResults, setTotalResults] = useState(0); // 총 검색 결과 개수
-
-    // ========================================
-    // React Router Hooks
-    // ========================================
-    const navigate = useNavigate();
-    const [searchParams] = useSearchParams();
-
-    /*
-        useSearchParams: URL 쿼리 파라미터 읽기
-        예: /search?q=avatar
-        searchParams.get('q') → "avatar"
-    */
 
     // ========================================
     // 영화 검색 API 호출

@@ -71,6 +71,25 @@ function Header() {
     }, []); // 빈 배열: 컴포넌트 mount 시 1회만 실행
 
     // ========================================
+    // Google OAuth 응답 처리 함수
+    // ========================================
+    const handleCredentialResponse = (response) => {
+        /*
+            Google 로그인 성공 시 호출되는 함수
+            response.credential: JWT 토큰 (사용자 정보 포함)
+        */
+        console.log("✅ Google 로그인 응답 받음!");
+
+        // AuthContext의 login 함수 호출
+        // → 토큰 디코딩 + 사용자 정보 저장 + localStorage 저장
+        const userData = login(response.credential);
+
+        if (userData) {
+            console.log("👤 로그인 완료:", userData.name);
+        }
+    };
+
+    // ========================================
     // Google OAuth 초기화
     // ========================================
     useEffect(() => {
@@ -101,26 +120,8 @@ function Header() {
         } else {
             console.warn("Google Identity Services script가 로드되지 않았습니다.");
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // 컴포넌트 mount 시 1회만 실행
-
-    // ========================================
-    // Google OAuth 응답 처리 함수
-    // ========================================
-    const handleCredentialResponse = (response) => {
-        /*
-            Google 로그인 성공 시 호출되는 함수
-            response.credential: JWT 토큰 (사용자 정보 포함)
-        */
-        console.log("✅ Google 로그인 응답 받음!");
-
-        // AuthContext의 login 함수 호출
-        // → 토큰 디코딩 + 사용자 정보 저장 + localStorage 저장
-        const userData = login(response.credential);
-
-        if (userData) {
-            console.log("👤 로그인 완료:", userData.name);
-        }
-    };
 
     // ========================================
     // 5. 모바일 메뉴 토글 함수
