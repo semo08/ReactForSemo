@@ -9,12 +9,16 @@ import Home from "./routes/Home";
 import Collection from "./routes/Collection";
 import Search from "./routes/Search";
 import { AuthProvider } from "./contexts/AuthContext";
+import ScrollManager from "./components/ScrollManager";
 
 function App() {
   return (
     // AuthProvider로 전체를 감싸서 모든 컴포넌트에서 로그인 정보 접근 가능
     <AuthProvider>
       <Router basename="/ReactForSemo">
+        {/* 전역 스크롤 위치 관리 */}
+        <ScrollManager />
+
         <Routes>
           {/* 영화 상세 페이지 */}
           <Route path="/movie/:id" element={<Detail />} />

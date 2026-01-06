@@ -34,7 +34,7 @@ Movie.propTypes = {
   coverImg: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   overview: PropTypes.string.isRequired,
-  genre_ids: PropTypes.arrayOf(PropTypes.string).isRequired
+  genre_ids: PropTypes.arrayOf(PropTypes.number).isRequired
 }
 
 export default Movie;

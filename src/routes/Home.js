@@ -22,17 +22,10 @@ function Home() {
   const [genres, setGenres] = useState({});
 
   // ========================================
-  // currentPage 초기값: sessionStorage에서 복원
+  // 페이지네이션 상태 (sessionStorage에서 복원)
   // ========================================
-  /*
-    뒤로가기로 돌아왔을 때:
-    - sessionStorage에 저장된 페이지가 있으면 그 페이지로 시작
-    - 없으면 1페이지로 시작
-
-    parseInt(): 문자열을 숫자로 변환
-    || 1: 값이 없거나 잘못된 경우 기본값 1 사용
-  */
   const [currentPage, setCurrentPage] = useState(() => {
+    // 뒤로가기로 돌아왔을 때 이전 페이지 번호 복원
     const savedPage = sessionStorage.getItem('homeCurrentPage');
     return savedPage ? parseInt(savedPage) : 1;
   });
@@ -78,36 +71,6 @@ function Home() {
     }
 
   };
-  // ========================================
-  // 브라우저 기본 스크롤 복원 비활성화 + 즉시 스크롤 복원
-  // ========================================
-  useEffect(() => {
-    /*
-      브라우저와 React Router는 기본적으로 페이지 전환 시
-      스크롤을 맨 위로 올립니다.
-      이것을 방지하기 위해 'manual' 모드로 설정합니다.
-
-      이게 핵심!
-      - auto (기본값): 브라우저가 자동으로 스크롤 위치 복원
-      - manual: 우리가 직접 스크롤 위치를 관리
-    */
-    if ('scrollRestoration' in window.history) {
-      window.history.scrollRestoration = 'manual';
-    }
-
-    /*
-      즉시 스크롤 위치 복원!
-      - 데이터 로드 전에 먼저 스크롤 위치를 설정
-      - 깜빡임 없이 바로 이전 위치로 이동
-      - 나중에 데이터가 로드되면 자연스럽게 컨텐츠가 채워짐
-    */
-    const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
-    if (savedScrollPosition) {
-      // 즉시 스크롤 (setTimeout 없이!)
-      window.scrollTo(0, parseInt(savedScrollPosition));
-      console.log('⚡ 즉시 스크롤 복원:', savedScrollPosition);
-    }
-  }, []); // 컴포넌트 mount 시 한 번만 실행
 
   // ========================================
   // 영화 데이터 로드
@@ -119,74 +82,12 @@ function Home() {
   console.log(movies);
 
   // ========================================
-  // currentPage 저장 (페이지가 바뀔 때마다)
+  // currentPage를 sessionStorage에 저장
   // ========================================
   useEffect(() => {
-    /*
-      currentPage가 변경될 때마다 sessionStorage에 저장
-      예: 사용자가 3페이지로 이동 → '3' 저장
-    */
+    // 페이지가 바뀔 때마다 저장 (뒤로가기 시 복원용)
     sessionStorage.setItem('homeCurrentPage', currentPage.toString());
-  }, [currentPage]); // currentPage가 바뀔 때마다 실행
-
-  // ========================================
-  // 스크롤 위치 저장 (스크롤할 때마다 실시간 저장)
-  // ========================================
-  useEffect(() => {
-    /*
-      문제: cleanup 함수에서 저장하면 너무 늦음
-      - Link 클릭 → 페이지 전환 시작 → 스크롤 0으로 리셋 → cleanup 실행
-      - 이미 스크롤이 0이 된 후라 0이 저장됨!
-
-      해결: 스크롤할 때마다 실시간으로 저장
-      - 사용자가 스크롤 → 즉시 sessionStorage에 저장
-      - Link 클릭 시 이미 올바른 값이 저장되어 있음!
-    */
-    const handleScroll = () => {
-      // 현재 스크롤 위치를 즉시 저장
-      sessionStorage.setItem('homeScrollPosition', window.scrollY.toString());
-    };
-
-    // 스크롤 이벤트 리스너 등록
-    window.addEventListener('scroll', handleScroll);
-
-    // cleanup: 컴포넌트 unmount 시 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      console.log('✅ 저장된 스크롤 위치:', sessionStorage.getItem('homeScrollPosition'));
-    };
-  }, []); // 빈 배열: 컴포넌트 mount/unmount 시에만 실행
-
-  // ========================================
-  // 스크롤 위치 미세 조정 (데이터 로드 후)
-  // ========================================
-  useEffect(() => {
-    /*
-      데이터가 로드된 후 스크롤 위치를 한 번 더 확인
-      - 즉시 복원으로 대부분 해결되지만, 혹시 모를 경우를 대비
-      - 데이터 로드 후 DOM이 완전히 렌더링되면 정확한 위치로 재조정
-    */
-    if (!loading && movies.length > 0) {
-      const savedScrollPosition = sessionStorage.getItem('homeScrollPosition');
-
-      if (savedScrollPosition) {
-        // 짧은 delay로 DOM 렌더링 완료 후 미세 조정
-        setTimeout(() => {
-          const targetPosition = parseInt(savedScrollPosition);
-          const currentPosition = window.scrollY;
-
-          // 현재 위치와 목표 위치가 다르면 재조정
-          if (Math.abs(currentPosition - targetPosition) > 10) {
-            window.scrollTo(0, targetPosition);
-            console.log('🔧 스크롤 위치 미세 조정:', currentPosition, '→', targetPosition);
-          }
-
-          // 복원 완료 후 sessionStorage에서 삭제
-          sessionStorage.removeItem('homeScrollPosition');
-        }, 50); // 매우 짧은 delay
-      }
-    }
-  }, [loading, movies]); // loading과 movies가 변경될 때마다 실행
+  }, [currentPage]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
