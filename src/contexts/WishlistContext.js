@@ -3,7 +3,7 @@
 // ========================================
 // 사용자의 찜한 영화 목록을 관리하는 Context
 
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import {
     collection,
     doc,
@@ -70,7 +70,9 @@ export function WishlistProvider({ children }) {
     // ========================================
     // 4. 찜 목록 불러오기 (Firestore → State)
     // ========================================
-    const loadWishlist = async () => {
+    // useCallback으로 감싸서 함수가 불필요하게 재생성되는 것 방지
+    // ESLint exhaustive-deps 에러 해결
+    const loadWishlist = useCallback(async () => {
         if (!isLoggedIn || !user?.email) {
             setWishlist([]);
             return;
@@ -102,7 +104,7 @@ export function WishlistProvider({ children }) {
         } finally {
             setLoading(false);
         }
-    };
+    }, [isLoggedIn, user?.email]); // dependencies: isLoggedIn, user.email 변경 시에만 함수 재생성
 
     // ========================================
     // 5. 찜 추가
@@ -216,7 +218,7 @@ export function WishlistProvider({ children }) {
         } else {
             setWishlist([]);
         }
-    }, [isLoggedIn, user?.email]);
+    }, [isLoggedIn, user?.email, loadWishlist]); // loadWishlist 추가 (ESLint 에러 수정)
 
     // ========================================
     // 10. Context Value
