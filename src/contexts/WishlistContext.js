@@ -53,19 +53,20 @@ export function WishlistProvider({ children }) {
     // ========================================
     // 3. Firestore 경로 생성
     // ========================================
-    const getWishlistRef = (movieId) => {
+    // useCallback으로 감싸서 ESLint 에러 방지
+    const getWishlistRef = useCallback((movieId) => {
         if (!user?.email) return null;
 
         // users/{userId}/wishlist/{movieId} 경로
         return doc(db, 'users', user.email, 'wishlist', String(movieId));
-    };
+    }, [user?.email]);
 
-    const getWishlistCollectionRef = () => {
+    const getWishlistCollectionRef = useCallback(() => {
         if (!user?.email) return null;
 
         // users/{userId}/wishlist 컬렉션
         return collection(db, 'users', user.email, 'wishlist');
-    };
+    }, [user?.email]);
 
     // ========================================
     // 4. 찜 목록 불러오기 (Firestore → State)
@@ -104,12 +105,12 @@ export function WishlistProvider({ children }) {
         } finally {
             setLoading(false);
         }
-    }, [isLoggedIn, user?.email]); // dependencies: isLoggedIn, user.email 변경 시에만 함수 재생성
+    }, [isLoggedIn, user?.email, getWishlistCollectionRef]); // dependencies 추가
 
     // ========================================
     // 5. 찜 추가
     // ========================================
-    const addToWishlist = async (movie) => {
+    const addToWishlist = useCallback(async (movie) => {
         /*
             movie 파라미터:
             {
@@ -155,12 +156,12 @@ export function WishlistProvider({ children }) {
             alert('찜 추가에 실패했습니다.');
             return false;
         }
-    };
+    }, [isLoggedIn, getWishlistRef]);
 
     // ========================================
     // 6. 찜 삭제
     // ========================================
-    const removeFromWishlist = async (movieId) => {
+    const removeFromWishlist = useCallback(async (movieId) => {
         if (!isLoggedIn) {
             alert('로그인이 필요합니다!');
             return false;
@@ -183,23 +184,23 @@ export function WishlistProvider({ children }) {
             alert('찜 삭제에 실패했습니다.');
             return false;
         }
-    };
+    }, [isLoggedIn, getWishlistRef]);
 
     // ========================================
     // 7. 찜 여부 확인
     // ========================================
-    const isInWishlist = (movieId) => {
+    const isInWishlist = useCallback((movieId) => {
         /*
             movieId가 찜 목록에 있는지 확인
             반환값: true/false
         */
         return wishlist.some(movie => movie.id === String(movieId));
-    };
+    }, [wishlist]);
 
     // ========================================
     // 8. 찜 토글 (추가/삭제)
     // ========================================
-    const toggleWishlist = async (movie) => {
+    const toggleWishlist = useCallback(async (movie) => {
         const inWishlist = isInWishlist(movie.id);
 
         if (inWishlist) {
@@ -207,7 +208,7 @@ export function WishlistProvider({ children }) {
         } else {
             return await addToWishlist(movie);
         }
-    };
+    }, [isInWishlist, removeFromWishlist, addToWishlist]);
 
     // ========================================
     // 9. 로그인 상태 변경 시 찜 목록 로드
