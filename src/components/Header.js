@@ -215,6 +215,16 @@ function Header() {
                             Search
                         </Link>
 
+                        {/* Wishlist 링크 (로그인 시에만 표시) */}
+                        {isLoggedIn && (
+                            <Link
+                                to="/wishlist"
+                                className={`${styles.navLink} ${location.pathname === '/wishlist' ? styles.active : ''}`}
+                            >
+                                Wishlist
+                            </Link>
+                        )}
+
                         {/* 로그인 / 프로필 영역 */}
                         {isLoggedIn ? (
                             // 로그인 상태: 프로필 + 로그아웃
@@ -296,6 +306,17 @@ function Header() {
                             >
                                 🔍 Search
                             </Link>
+
+                            {/* Wishlist 링크 (로그인 시에만) */}
+                            {isLoggedIn && (
+                                <Link
+                                    to="/wishlist"
+                                    className={styles.mobileNavLink}
+                                    onClick={toggleMenu}
+                                >
+                                    ❤️ Wishlist
+                                </Link>
+                            )}
 
                             {/* 로그인 / 프로필 영역 (모바일) */}
                             {isLoggedIn ? (

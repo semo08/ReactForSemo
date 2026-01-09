@@ -7,6 +7,8 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Header from "../components/Header";
+import { useWishlist } from "../contexts/WishlistContext";
+import { useAuth } from "../contexts/AuthContext";
 import styles from "./Detail.module.css";
 
 // ========================================
@@ -24,11 +26,16 @@ function Detail() {
     const navigate = useNavigate();          // 페이지 이동을 위한 Hook
 
     // ========================================
+    // Context Hooks
+    // ========================================
+    const { isInWishlist, toggleWishlist } = useWishlist();
+    const { isLoggedIn } = useAuth();
+
+    // ========================================
     // State 관리
     // ========================================
     const [movie, setMovie] = useState(null);           // 영화 데이터 저장
     const [loading, setLoading] = useState(true);       // 로딩 상태
-    const [isWishlisted, setIsWishlisted] = useState(false); // 찜 상태 (로컬 전용)
 
     // ========================================
     // 영화 데이터 가져오기
@@ -57,10 +64,16 @@ function Detail() {
     // ========================================
     // 찜 버튼 핸들러
     // ========================================
-    const handleWishlist = () => {
-        // TODO: Firebase 연동 후 실제 DB에 저장하는 기능 구현 예정
-        // 현재는 로컬 state만 변경 (새로고침하면 사라짐)
-        setIsWishlisted(!isWishlisted);
+    const handleWishlist = async () => {
+        if (!isLoggedIn) {
+            alert('로그인이 필요합니다!');
+            return;
+        }
+
+        if (!movie) return;
+
+        // Firebase에 찜 추가/삭제
+        await toggleWishlist(movie);
     };
 
     // ========================================
@@ -241,12 +254,12 @@ function Detail() {
 
                             {/* 찜 버튼 */}
                             <button
-                                className={`${styles.wishlistButton} ${isWishlisted ? styles.active : ''}`}
+                                className={`${styles.wishlistButton} ${movie && isInWishlist(movie.id) ? styles.active : ''}`}
                                 onClick={handleWishlist}
                                 aria-label="Add to wishlist" // 접근성: 스크린 리더가 읽어줌
                             >
                                 {/* 찜 했으면 빨간 하트, 안 했으면 흰 하트 */}
-                                {isWishlisted ? '❤️' : '🤍'}
+                                {movie && isInWishlist(movie.id) ? '❤️' : '🤍'}
                             </button>
                         </div>
                     </div>

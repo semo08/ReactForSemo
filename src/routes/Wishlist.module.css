@@ -1,0 +1,183 @@
+/* ========================================
+   Wishlist.module.css - 찜 목록 페이지 스타일
+   ======================================== */
+
+/* ========================================
+   컨테이너
+   ======================================== */
+.container {
+    min-height: 100vh;
+    padding: 100px 20px 40px;
+    background: linear-gradient(135deg, #0f0f0f 0%, #1a1a1a 100%);
+}
+
+/* ========================================
+   타이틀 섹션
+   ======================================== */
+.titleSection {
+    max-width: 1200px;
+    margin: 0 auto 40px;
+    text-align: center;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    color: #999;
+}
+
+/* ========================================
+   로딩
+   ======================================== */
+.loading {
+    text-align: center;
+    padding: 100px 20px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+/* ========================================
+   영화 그리드
+   ======================================== */
+.moviesGrid {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 30px;
+}
+
+/* ========================================
+   영화 래퍼 (삭제 버튼 포함)
+   ======================================== */
+.movieWrapper {
+    position: relative;
+}
+
+.removeButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(220, 38, 38, 0.9);
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    z-index: 10;
+    opacity: 0;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.movieWrapper:hover .removeButton {
+    opacity: 1;
+}
+
+.removeButton:hover {
+    background: rgba(220, 38, 38, 1);
+    transform: scale(1.05);
+}
+
+/* ========================================
+   빈 상태
+   ======================================== */
+.emptyState {
+    max-width: 500px;
+    margin: 100px auto;
+    text-align: center;
+    padding: 60px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.emptyIcon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+}
+
+.emptyTitle {
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.emptyText {
+    font-size: 1.1rem;
+    color: #999;
+    margin-bottom: 30px;
+}
+
+.browseButton {
+    background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+    color: white;
+    border: none;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+}
+
+.browseButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+}
+
+/* ========================================
+   반응형 (모바일)
+   ======================================== */
+@media (max-width: 768px) {
+    .container {
+        padding: 80px 15px 30px;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .moviesGrid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 20px;
+    }
+
+    .removeButton {
+        opacity: 1; /* 모바일에서는 항상 보이게 */
+        font-size: 0.75rem;
+        padding: 6px 10px;
+    }
+
+    .emptyIcon {
+        font-size: 4rem;
+    }
+
+    .emptyTitle {
+        font-size: 1.5rem;
+    }
+
+    .emptyText {
+        font-size: 1rem;
+    }
+}
