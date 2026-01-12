@@ -94,7 +94,7 @@ function Wishlist() {
                                     onClick={() => handleRemove(movie.id, movie.title)}
                                     aria-label="Remove from wishlist"
                                 >
-                                    ✕ Remove
+                                    Remove ✕
                                 </button>
                             </div>
                         ))}
