@@ -176,7 +176,7 @@ export function WishlistProvider({ children }) {
             alert('찜 추가에 실패했습니다: ' + error.message);
             return false;
         }
-    }, [isLoggedIn, getWishlistRef]);
+    }, [isLoggedIn, user?.email, getWishlistRef]);
 
     // ========================================
     // 6. 찜 삭제
