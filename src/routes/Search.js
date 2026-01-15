@@ -3,7 +3,8 @@
 // ========================================
 // 사용자가 검색어를 입력하면 TMDb API로 영화를 검색
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Movie from "../components/Movie";
 import styles from "./Search.module.css";
@@ -16,9 +17,15 @@ const API_KEY = process.env.REACT_APP_TMDB_API_KEY;
 
 function Search() {
     // ========================================
+    // URL Query Parameter 관리
+    // ========================================
+    const [searchParams, setSearchParams] = useSearchParams();
+    const queryFromURL = searchParams.get("q") || ""; // URL에서 검색어 가져오기
+
+    // ========================================
     // State 관리
     // ========================================
-    const [searchQuery, setSearchQuery] = useState(""); // 검색어 입력값
+    const [searchQuery, setSearchQuery] = useState(queryFromURL); // 검색어 입력값
     const [movies, setMovies] = useState([]); // 검색 결과
     const [loading, setLoading] = useState(false); // 로딩 상태
     const [searched, setSearched] = useState(false); // 검색 실행 여부
@@ -70,6 +77,16 @@ function Search() {
     };
 
     // ========================================
+    // URL에서 검색어가 있으면 자동 검색
+    // ========================================
+    useEffect(() => {
+        if (queryFromURL) {
+            searchMovies(queryFromURL);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // 컴포넌트 mount 시 1회만 실행
+
+    // ========================================
     // 검색 폼 제출 핸들러
     // ========================================
     const handleSubmit = (e) => {
@@ -78,6 +95,10 @@ function Search() {
             e.preventDefault(): 페이지 새로고침 방지
         */
         e.preventDefault();
+
+        // URL에 검색어 추가 (뒤로가기 시 검색 결과 유지)
+        setSearchParams({ q: searchQuery });
+
         searchMovies(searchQuery);
     };
 

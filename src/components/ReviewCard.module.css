@@ -1,0 +1,279 @@
+/* ========================================
+   ReviewCard.module.css - 리뷰 카드 스타일
+   ======================================== */
+
+/* 카드 컨테이너 */
+.card {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+/* 헤더 (프로필 + 별점) */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    gap: 16px;
+}
+
+/* 프로필 영역 */
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.profileImage {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.userName {
+    font-size: 15px;
+    font-weight: 600;
+    color: #ffffff;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.date {
+    font-size: 12px;
+    color: #888888;
+}
+
+/* 리뷰 내용 */
+.content {
+    margin-bottom: 16px;
+}
+
+.reviewText {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cccccc;
+    margin: 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* 더 보기 버튼 */
+.toggleButton {
+    background: none;
+    border: none;
+    color: #e50914;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 0;
+    margin-top: 8px;
+    transition: color 0.2s ease;
+}
+
+.toggleButton:hover {
+    color: #f40612;
+    text-decoration: underline;
+}
+
+/* 액션 버튼 영역 */
+.actions {
+    display: flex;
+    gap: 8px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* 수정 버튼 */
+.editButton {
+    flex: 1;
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.editButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+/* 삭제 버튼 */
+.deleteButton {
+    flex: 1;
+    background: transparent;
+    color: #ff6b6b;
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.deleteButton:hover {
+    background: rgba(229, 9, 20, 0.1);
+    border-color: rgba(229, 9, 20, 0.5);
+}
+
+/* 모달 오버레이 */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+
+/* 모달 */
+.modal {
+    background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 32px;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modalTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 12px 0;
+}
+
+.modalText {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #cccccc;
+    margin: 0 0 24px 0;
+}
+
+/* 모달 버튼 */
+.modalButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.modalDeleteButton {
+    flex: 1;
+    background: linear-gradient(135deg, #e50914 0%, #c00812 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalDeleteButton:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.4);
+}
+
+.modalCancelButton {
+    flex: 1;
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.modalCancelButton:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 768px) {
+    .card {
+        padding: 16px;
+    }
+
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .profile {
+        width: 100%;
+    }
+
+    .profileImage {
+        width: 36px;
+        height: 36px;
+    }
+
+    .userName {
+        font-size: 14px;
+    }
+
+    .reviewText {
+        font-size: 13px;
+    }
+
+    .actions {
+        flex-direction: column;
+    }
+
+    .editButton,
+    .deleteButton {
+        width: 100%;
+    }
+
+    .modal {
+        padding: 24px;
+    }
+
+    .modalButtons {
+        flex-direction: column;
+    }
+
+    .modalDeleteButton,
+    .modalCancelButton {
+        width: 100%;
+    }
+}

@@ -1,0 +1,219 @@
+/* ========================================
+   ReviewForm.module.css - 리뷰 폼 스타일
+   ======================================== */
+
+/* 폼 컨테이너 */
+.form {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.form:hover {
+    border-color: rgba(229, 9, 20, 0.3);
+}
+
+/* 제목 */
+.title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 24px 0;
+}
+
+/* 필드 */
+.field {
+    margin-bottom: 20px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #cccccc;
+    margin-bottom: 8px;
+}
+
+/* 텍스트에어리어 */
+.textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
+
+.textarea:focus {
+    outline: none;
+    border-color: rgba(229, 9, 20, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.textarea::placeholder {
+    color: #666666;
+}
+
+.textarea:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 글자 수 카운터 */
+.charCounter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    color: #888888;
+    margin-top: 4px;
+}
+
+.overLimit {
+    color: #e50914;
+    font-weight: 600;
+}
+
+.minWarning {
+    color: #ffa500;
+    font-size: 11px;
+}
+
+/* 에러 메시지 */
+.error {
+    background: rgba(229, 9, 20, 0.1);
+    border: 1px solid rgba(229, 9, 20, 0.3);
+    border-radius: 8px;
+    padding: 12px;
+    color: #ff6b6b;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+/* 버튼 영역 */
+.buttons {
+    display: flex;
+    gap: 12px;
+}
+
+/* 제출 버튼 */
+.submitButton {
+    flex: 1;
+    background: linear-gradient(135deg, #e50914 0%, #c00812 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submitButton:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.4);
+}
+
+.submitButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 취소 버튼 */
+.cancelButton {
+    flex: 1;
+    background: transparent;
+    color: #cccccc;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancelButton:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.cancelButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* 로그인 프롬프트 */
+.loginPrompt {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+}
+
+.loginText {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 8px 0;
+}
+
+.loginSubtext {
+    font-size: 14px;
+    color: #888888;
+    margin: 0;
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 768px) {
+    .form {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 18px;
+        margin-bottom: 20px;
+    }
+
+    .textarea {
+        font-size: 13px;
+        padding: 10px;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .submitButton,
+    .cancelButton {
+        width: 100%;
+    }
+
+    .loginPrompt {
+        padding: 24px;
+    }
+
+    .loginText {
+        font-size: 16px;
+    }
+
+    .loginSubtext {
+        font-size: 13px;
+    }
+}

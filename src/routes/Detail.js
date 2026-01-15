@@ -7,6 +7,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import Header from "../components/Header";
+import ReviewSection from "../components/ReviewSection";
 import { useWishlist } from "../contexts/WishlistContext";
 import { useAuth } from "../contexts/AuthContext";
 import styles from "./Detail.module.css";
@@ -557,6 +558,18 @@ function Detail() {
                     </Link>
                 </section>
             )}
+
+            {/* ========================================
+                7. 평점 및 리뷰 (Reviews Section)
+                ========================================
+                - 내 리뷰 작성/수정
+                - 다른 사용자 리뷰 목록
+            */}
+            <ReviewSection
+                movieId={movie.id}
+                movieTitle={movie.title}
+                moviePoster={movie.poster_path ? `${IMG_BASE_URL}${movie.poster_path}` : ""}
+            />
             </div>
         </>
     );

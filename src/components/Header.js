@@ -97,63 +97,33 @@ function Header() {
             Google Identity Services 초기화
             - Google Script가 로드된 후 실행되어야 함
             - 로그인 버튼 렌더링
+            - 로그아웃 시에도 다시 렌더링 (isLoggedIn 변경 감지)
         */
 
-        // Google 로그인 버튼을 초기화하는 함수
-        const initializeGoogleLogin = () => {
-            if (window.google) {
-                window.google.accounts.id.initialize({
-                    client_id: CLIENT_ID,
-                    callback: handleCredentialResponse,
+        // 비로그인 상태일 때만 로그인 버튼 렌더링
+        if (!isLoggedIn && window.google) {
+            window.google.accounts.id.initialize({
+                client_id: CLIENT_ID,
+                callback: handleCredentialResponse,
+            });
+
+            // 로그인 버튼 렌더링 (loginBtn ID를 가진 요소에)
+            const loginButton = document.getElementById("loginBtn");
+            if (loginButton) {
+                // 기존 버튼 내용 초기화 (중복 렌더링 방지)
+                loginButton.innerHTML = "";
+
+                window.google.accounts.id.renderButton(loginButton, {
+                    theme: "filled_black",   // 다크 테마 (어두운 배경)
+                    size: "medium",          // 중간 크기
+                    shape: "rectangular",    // 사각형 (기본)
+                    text: "signin",          // "Sign in" (짧은 텍스트)
+                    logo_alignment: "left",  // 로고 왼쪽 정렬
                 });
-
-                // 로그인 버튼 렌더링 (loginBtn ID를 가진 요소에)
-                const loginButton = document.getElementById("loginBtn");
-                if (loginButton) {
-                    window.google.accounts.id.renderButton(loginButton, {
-                        theme: "filled_black",   // 다크 테마 (어두운 배경)
-                        size: "medium",          // 중간 크기
-                        shape: "rectangular",    // 사각형 (기본)
-                        text: "signin",          // "Sign in" (짧은 텍스트)
-                        logo_alignment: "left",  // 로고 왼쪽 정렬
-                    });
-                    console.log("✅ Google 로그인 버튼 렌더링 완료");
-                }
             }
-        };
-
-        // Google Script가 이미 로드되었는지 확인
-        if (window.google) {
-            // 이미 로드됨 → 즉시 초기화
-            initializeGoogleLogin();
-        } else {
-            // 아직 로드 안됨 → 스크립트 로드 대기
-            console.log("⏳ Google Script 로드 대기 중...");
-
-            // 100ms마다 확인 (최대 5초)
-            let attempts = 0;
-            const maxAttempts = 50;
-
-            const checkGoogleLoaded = setInterval(() => {
-                attempts++;
-
-                if (window.google) {
-                    // 로드 완료 → 초기화
-                    clearInterval(checkGoogleLoaded);
-                    console.log("✅ Google Script 로드 완료");
-                    initializeGoogleLogin();
-                } else if (attempts >= maxAttempts) {
-                    // 타임아웃
-                    clearInterval(checkGoogleLoaded);
-                    console.error("❌ Google Script 로드 실패 (타임아웃)");
-                }
-            }, 100);
-
-            // Cleanup: 컴포넌트 unmount 시 interval 정리
-            return () => clearInterval(checkGoogleLoaded);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 컴포넌트 mount 시 1회만 실행
+    }, [isLoggedIn]); // isLoggedIn 변경 시마다 실행
 
     // ========================================
     // 5. 모바일 메뉴 토글 함수

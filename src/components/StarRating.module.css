@@ -1,0 +1,112 @@
+/* ========================================
+   StarRating.module.css - 별점 컴포넌트 스타일
+   ======================================== */
+
+/* 컨테이너 */
+.container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* 별 컨테이너 */
+.stars {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* 개별 별 */
+.star {
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+/* 채워진 별 (골드) */
+.star.filled {
+    color: #ffd700;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+/* 빈 별 (어두운 회색) */
+.star.empty {
+    color: #444444;
+}
+
+/* 인터랙티브 별 (클릭 가능) */
+.star.interactive {
+    cursor: pointer;
+}
+
+.star.interactive:hover {
+    transform: scale(1.2);
+}
+
+/* 크기: Small */
+.star.small {
+    font-size: 16px;
+}
+
+/* 크기: Medium (기본) */
+.star.medium {
+    font-size: 24px;
+}
+
+/* 크기: Large */
+.star.large {
+    font-size: 32px;
+}
+
+/* 숫자 레이블 */
+.label {
+    font-weight: 600;
+    color: #ffffff;
+    white-space: nowrap;
+}
+
+.label.small {
+    font-size: 14px;
+}
+
+.label.medium {
+    font-size: 16px;
+}
+
+.label.large {
+    font-size: 20px;
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 768px) {
+    .container {
+        gap: 8px;
+    }
+
+    .stars {
+        gap: 2px;
+    }
+
+    .star.small {
+        font-size: 14px;
+    }
+
+    .star.medium {
+        font-size: 20px;
+    }
+
+    .star.large {
+        font-size: 28px;
+    }
+
+    .label.small {
+        font-size: 12px;
+    }
+
+    .label.medium {
+        font-size: 14px;
+    }
+
+    .label.large {
+        font-size: 18px;
+    }
+}

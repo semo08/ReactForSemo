@@ -1,0 +1,226 @@
+/* ========================================
+   ReviewSection.module.css - 리뷰 섹션 스타일
+   ======================================== */
+
+/* 섹션 컨테이너 */
+.section {
+    padding: 60px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 섹션 제목 */
+.sectionTitle {
+    font-size: 32px;
+    font-weight: 700;
+    color: #ffffff;
+    margin: 0 0 40px 0;
+    text-align: center;
+}
+
+/* 서브 제목 */
+.subTitle {
+    font-size: 20px;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 20px 0;
+}
+
+/* 내 리뷰 영역 */
+.myReviewArea {
+    margin-bottom: 60px;
+}
+
+/* 다른 사용자 리뷰 영역 */
+.othersReviewArea {
+    margin-top: 60px;
+}
+
+/* 헤더 (제목 + 정렬) */
+.othersHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+}
+
+/* 정렬 선택 */
+.sortSelect {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    padding: 8px 16px;
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sortSelect:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.25);
+}
+
+.sortSelect:focus {
+    outline: none;
+    border-color: rgba(229, 9, 20, 0.5);
+}
+
+/* 리뷰 목록 */
+.reviewsList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 로딩 상태 */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 16px;
+}
+
+.loading p {
+    font-size: 16px;
+    color: #888888;
+    margin: 0;
+}
+
+/* 스피너 */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    border-top-color: #e50914;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* 빈 상태 */
+.empty {
+    background: linear-gradient(135deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.02) 100%);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.emptyText {
+    font-size: 16px;
+    color: #888888;
+    margin: 0;
+}
+
+/* 더 보기 버튼 */
+.loadMoreButton {
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 32px auto 0;
+    background: transparent;
+    color: #e50914;
+    border: 2px solid #e50914;
+    border-radius: 8px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.loadMoreButton:hover {
+    background: rgba(229, 9, 20, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(229, 9, 20, 0.3);
+}
+
+/* 반응형: 태블릿 */
+@media (max-width: 1024px) {
+    .section {
+        padding: 40px 20px;
+    }
+
+    .sectionTitle {
+        font-size: 28px;
+        margin-bottom: 32px;
+    }
+
+    .myReviewArea {
+        margin-bottom: 48px;
+    }
+
+    .othersReviewArea {
+        margin-top: 48px;
+    }
+}
+
+/* 반응형: 모바일 */
+@media (max-width: 768px) {
+    .section {
+        padding: 32px 16px;
+    }
+
+    .sectionTitle {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    .subTitle {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .myReviewArea {
+        margin-bottom: 40px;
+    }
+
+    .othersReviewArea {
+        margin-top: 40px;
+    }
+
+    .othersHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .sortSelect {
+        width: 100%;
+    }
+
+    .reviewsList {
+        gap: 16px;
+    }
+
+    .loading {
+        padding: 40px 20px;
+    }
+
+    .empty {
+        padding: 40px 16px;
+    }
+
+    .emptyText {
+        font-size: 14px;
+    }
+
+    .loadMoreButton {
+        max-width: 100%;
+        font-size: 13px;
+        padding: 10px 20px;
+    }
+}
