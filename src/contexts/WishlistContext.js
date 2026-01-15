@@ -88,7 +88,6 @@ export function WishlistProvider({ children }) {
             // Firestore에서 찜 목록 가져오기 (최신순 정렬)
             const q = query(wishlistRef, orderBy('addedAt', 'desc'));
             const querySnapshot = await getDocs(q);
-            console.log("querySnapshot: ", querySnapshot);
 
             const movies = [];
             querySnapshot.forEach((doc) => {
@@ -212,25 +211,15 @@ export function WishlistProvider({ children }) {
     }, [isInWishlist, removeFromWishlist, addToWishlist]);
 
     // ========================================
-    // 9. 초기 로드: 컴포넌트 마운트 시 찜 목록 로드
+    // 9. 로그인 상태 변경 시 찜 목록 로드
     // ========================================
     useEffect(() => {
         if (isLoggedIn && user?.email) {
             loadWishlist();
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 컴포넌트 마운트 시 1회만 실행 (의도적으로 빈 배열)
-
-    // ========================================
-    // 10. 로그인 상태 변경 시 찜 목록 로드
-    // ========================================
-    useEffect(() => {
-        if (isLoggedIn) {
-            loadWishlist();
         } else {
             setWishlist([]);
         }
-    }, [isLoggedIn, user?.email, loadWishlist]); // loadWishlist 추가 (ESLint 에러 수정)
+    }, [isLoggedIn, user?.email, loadWishlist])
 
     // ========================================
     // 10. Context Value
