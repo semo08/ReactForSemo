@@ -117,7 +117,8 @@ export function AuthProvider({ children }) {
             // localStorage에 저장 (브라우저 닫아도 유지)
             localStorage.setItem('cinemoUser', JSON.stringify(userData));
 
-            console.log('✅ 로그인 성공:', userData.name);
+            console.log('✅ [DEBUG] 로그인 성공:', userData);
+            console.log('✅ [DEBUG] 사용자 이메일:', userData.email);
 
             return userData;
         } catch (error) {

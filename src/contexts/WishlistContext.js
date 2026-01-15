@@ -74,6 +74,8 @@ export function WishlistProvider({ children }) {
     // useCallback으로 감싸서 함수가 불필요하게 재생성되는 것 방지
     // ESLint exhaustive-deps 에러 해결
     const loadWishlist = useCallback(async () => {
+        console.log('🔍 [DEBUG] loadWishlist 시작', { isLoggedIn, userEmail: user?.email });
+
         if (!isLoggedIn || !user?.email) {
             setWishlist([]);
             return;
@@ -83,11 +85,17 @@ export function WishlistProvider({ children }) {
             setLoading(true);
 
             const wishlistRef = getWishlistCollectionRef();
-            if (!wishlistRef) return;
+            console.log('🔍 [DEBUG] wishlistRef:', wishlistRef);
+            if (!wishlistRef) {
+                console.error('❌ [DEBUG] wishlistRef가 null!');
+                return;
+            }
 
             // Firestore에서 찜 목록 가져오기 (최신순 정렬)
             const q = query(wishlistRef, orderBy('addedAt', 'desc'));
+            console.log('🔍 [DEBUG] Firestore 쿼리 시작...');
             const querySnapshot = await getDocs(q);
+            console.log('🔍 [DEBUG] Firestore 쿼리 완료, 문서 수:', querySnapshot.size);
 
             const movies = [];
             querySnapshot.forEach((doc) => {
@@ -98,9 +106,10 @@ export function WishlistProvider({ children }) {
             });
 
             setWishlist(movies);
-            console.log(`✅ 찜 목록 로드 완료: ${movies.length}개`);
+            console.log(`✅ [DEBUG] 찜 목록 로드 완료: ${movies.length}개`, movies);
         } catch (error) {
-            console.error('찜 목록 로드 실패:', error);
+            console.error('❌ [DEBUG] 찜 목록 로드 실패:', error);
+            console.error('❌ [DEBUG] 에러 상세:', error.code, error.message);
             setWishlist([]);
         } finally {
             setLoading(false);
@@ -122,6 +131,8 @@ export function WishlistProvider({ children }) {
             }
         */
 
+        console.log('🔍 [DEBUG] addToWishlist 시작', { isLoggedIn, userEmail: user?.email, movieId: movie.id });
+
         if (!isLoggedIn) {
             alert('로그인이 필요합니다!');
             return false;
@@ -129,7 +140,11 @@ export function WishlistProvider({ children }) {
 
         try {
             const movieRef = getWishlistRef(movie.id);
-            if (!movieRef) return false;
+            console.log('🔍 [DEBUG] movieRef:', movieRef);
+            if (!movieRef) {
+                console.error('❌ [DEBUG] movieRef가 null!');
+                return false;
+            }
 
             // Firestore에 저장할 데이터
             const wishlistData = {
@@ -143,17 +158,22 @@ export function WishlistProvider({ children }) {
                 addedAt: Date.now() // 추가한 시간 (밀리초)
             };
 
+            console.log('🔍 [DEBUG] Firestore 저장 시도:', wishlistData);
+
             // Firestore에 저장
             await setDoc(movieRef, wishlistData);
+
+            console.log('✅ [DEBUG] Firestore 저장 성공!');
 
             // State 업데이트 (즉시 반영)
             setWishlist(prev => [wishlistData, ...prev]);
 
-            console.log(`✅ 찜 추가: ${movie.title}`);
+            console.log(`✅ [DEBUG] 찜 추가 완료: ${movie.title}`);
             return true;
         } catch (error) {
-            console.error('찜 추가 실패:', error);
-            alert('찜 추가에 실패했습니다.');
+            console.error('❌ [DEBUG] 찜 추가 실패:', error);
+            console.error('❌ [DEBUG] 에러 상세:', error.code, error.message);
+            alert('찜 추가에 실패했습니다: ' + error.message);
             return false;
         }
     }, [isLoggedIn, getWishlistRef]);

@@ -30,10 +30,21 @@ const firebaseConfig = {
     appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
+// 디버깅: Firebase 환경변수 확인
+console.log('🔍 [DEBUG] Firebase Config:', {
+    apiKey: firebaseConfig.apiKey ? '✅ 있음' : '❌ 없음',
+    authDomain: firebaseConfig.authDomain ? '✅ 있음' : '❌ 없음',
+    projectId: firebaseConfig.projectId,
+    storageBucket: firebaseConfig.storageBucket ? '✅ 있음' : '❌ 없음',
+    messagingSenderId: firebaseConfig.messagingSenderId ? '✅ 있음' : '❌ 없음',
+    appId: firebaseConfig.appId ? '✅ 있음' : '❌ 없음'
+});
+
 // ========================================
 // Firebase 앱 초기화
 // ========================================
 const app = initializeApp(firebaseConfig);
+console.log('✅ [DEBUG] Firebase 초기화 완료');
 
 // ========================================
 // Firestore 데이터베이스 인스턴스 생성
