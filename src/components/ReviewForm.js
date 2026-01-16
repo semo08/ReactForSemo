@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext";
 import StarRating from "./StarRating";
 import styles from "./ReviewForm.module.css";
-// import { createReview, updateReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
+import { createReview, updateReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
 
 function ReviewForm({
     movieId,
@@ -84,8 +84,6 @@ function ReviewForm({
         setLoading(true);
 
         try {
-            // TODO: Firebase 연동 후 주석 해제
-            /*
             if (mode === "create") {
                 // 리뷰 생성
                 const reviewData = {
@@ -108,7 +106,6 @@ function ReviewForm({
                     updatedAt: new Date()
                 });
             }
-            */
 
             // 임시: 성공 시뮬레이션 (Firebase 연동 전)
             console.log("📝 리뷰 저장 (시뮬레이션):", {

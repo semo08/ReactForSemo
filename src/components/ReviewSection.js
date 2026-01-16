@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 import ReviewForm from "./ReviewForm";
 import ReviewCard from "./ReviewCard";
 import styles from "./ReviewSection.module.css";
-// import { getUserReviewForMovie, getReviewsForMovie, deleteReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
+import { getUserReviewForMovie, getReviewsForMovie, deleteReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
 
 function ReviewSection({
     movieId,
@@ -44,8 +44,6 @@ function ReviewSection({
         setLoading(true);
 
         try {
-            // TODO: Firebase 연동 후 주석 해제
-            /*
             // 1. 내 리뷰 가져오기 (로그인한 경우)
             if (isLoggedIn && user) {
                 const userId = user.sub || user.uid;
@@ -62,65 +60,8 @@ function ReviewSection({
                 : reviews;
 
             setOtherReviews(filteredReviews);
-            */
 
-            // 임시: 더미 데이터 (Firebase 연동 전)
-            await new Promise(resolve => setTimeout(resolve, 500)); // 로딩 시뮬레이션
-
-            // 더미 내 리뷰
-            if (isLoggedIn && user) {
-                setMyReview({
-                    id: "my-review-1",
-                    userId: user.sub || user.uid || "user123",
-                    userName: user.name || "Me",
-                    userPhoto: user.picture || "https://via.placeholder.com/40",
-                    rating: 8.5,
-                    reviewText: "This is my review for this movie. I really enjoyed it! (This is dummy data until Firebase is connected)",
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                });
-            }
-
-            // 더미 다른 사용자 리뷰
-            const dummyReviews = [
-                {
-                    id: "review-1",
-                    userId: "user456",
-                    userName: "김철수",
-                    userPhoto: "https://i.pravatar.cc/150?img=1",
-                    rating: 9.0,
-                    reviewText: "Absolutely amazing movie! The visuals were stunning and the story kept me engaged throughout. Highly recommend to everyone!",
-                    createdAt: new Date(Date.now() - 86400000), // 1일 전
-                },
-                {
-                    id: "review-2",
-                    userId: "user789",
-                    userName: "이영희",
-                    userPhoto: "https://i.pravatar.cc/150?img=5",
-                    rating: 7.5,
-                    reviewText: "Pretty good movie overall. Some parts were a bit slow, but the ending was worth it.",
-                    createdAt: new Date(Date.now() - 172800000), // 2일 전
-                },
-                {
-                    id: "review-3",
-                    userId: "user101",
-                    userName: "박민수",
-                    userPhoto: "https://i.pravatar.cc/150?img=8",
-                    rating: 10.0,
-                    reviewText: "Masterpiece! One of the best movies I've seen this year. The cinematography, acting, and soundtrack were all perfect. Can't wait to watch it again!",
-                    createdAt: new Date(Date.now() - 259200000), // 3일 전
-                }
-            ];
-
-            // 정렬
-            const sorted = [...dummyReviews].sort((a, b) => {
-                if (sortBy === "rating") {
-                    return b.rating - a.rating;
-                }
-                return b.createdAt - a.createdAt;
-            });
-
-            setOtherReviews(sorted);
+            /* 더미 데이터 제거 - Firebase 연동 완료! */
 
         } catch (error) {
             console.error("리뷰 로딩 실패:", error);
@@ -149,20 +90,13 @@ function ReviewSection({
     // ========================================
     const handleDelete = async (reviewId) => {
         try {
-            // TODO: Firebase 연동 후 주석 해제
-            /*
-            const userId = user.sub || user.uid;
-            await deleteReview(reviewId, userId, movieId);
-            */
+            // Firebase에서 리뷰 삭제
+            await deleteReview(reviewId);
 
-            // 임시: 삭제 시뮬레이션
-            console.log("🗑️ 리뷰 삭제 (시뮬레이션):", reviewId);
-            alert("Review deleted successfully! (Firebase not connected yet)");
+            // UI 업데이트: 리뷰 목록 다시 로드
+            await loadReviews();
 
-            // 내 리뷰 삭제
-            setMyReview(null);
-            setShowEditForm(false);
-            loadReviews();
+            alert("Review deleted successfully!");
 
         } catch (error) {
             console.error("리뷰 삭제 실패:", error);
