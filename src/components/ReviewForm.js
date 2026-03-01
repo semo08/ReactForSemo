@@ -9,7 +9,7 @@ import PropTypes from "prop-types";
 import { useAuth } from "../contexts/AuthContext";
 import StarRating from "./StarRating";
 import styles from "./ReviewForm.module.css";
-import { createReview, updateReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
+import { createReview, updateReview } from "../firebase/reviewService";
 
 function ReviewForm({
     movieId,
@@ -38,7 +38,7 @@ function ReviewForm({
     // ========================================
     const charCount = reviewText.length;
     const maxChars = 500;
-    const minChars = 10;
+    const minChars = 5;
 
     // ========================================
     // 폼 유효성 검사
@@ -100,21 +100,13 @@ function ReviewForm({
                 await createReview(reviewData);
             } else {
                 // 리뷰 수정
-                await updateReview(initialData.reviewId, {
+                await updateReview(initialData.id, {
                     rating,
-                    reviewText: reviewText.trim(),
-                    updatedAt: new Date()
+                    reviewText: reviewText.trim()
                 });
             }
 
-            // 임시: 성공 시뮬레이션 (Firebase 연동 전)
-            console.log("📝 리뷰 저장 (시뮬레이션):", {
-                mode,
-                rating,
-                reviewText: reviewText.trim(),
-                movieId,
-                user: user?.name
-            });
+            console.log("✅ 리뷰 저장 완료:", { mode, movieId, rating });
 
             // 성공 콜백
             onSuccess();
@@ -124,8 +116,6 @@ function ReviewForm({
                 setRating(0);
                 setReviewText("");
             }
-
-            alert(`Review ${mode === "create" ? "submitted" : "updated"} successfully! (Firebase not connected yet)`);
 
         } catch (err) {
             console.error("리뷰 저장 실패:", err);
@@ -253,9 +243,9 @@ ReviewForm.propTypes = {
     movieTitle: PropTypes.string,
     moviePoster: PropTypes.string,
     initialData: PropTypes.shape({
+        id: PropTypes.string,
         rating: PropTypes.number,
-        reviewText: PropTypes.string,
-        reviewId: PropTypes.string
+        reviewText: PropTypes.string
     }),
     mode: PropTypes.oneOf(["create", "edit"]),
     onSuccess: PropTypes.func,

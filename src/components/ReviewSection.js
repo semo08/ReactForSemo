@@ -10,7 +10,7 @@ import { useAuth } from "../contexts/AuthContext";
 import ReviewForm from "./ReviewForm";
 import ReviewCard from "./ReviewCard";
 import styles from "./ReviewSection.module.css";
-import { getUserReviewForMovie, getReviewsForMovie, deleteReview } from "../firebase/reviewService"; // TODO: Firebase 연동 후 주석 해제
+import { getUserReviewForMovie, getReviewsForMovie, deleteReview } from "../firebase/reviewService";
 
 function ReviewSection({
     movieId,

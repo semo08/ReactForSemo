@@ -104,6 +104,7 @@ export function AuthProvider({ children }) {
             */
 
             const userData = {
+                sub: payload.sub, // Google 고유 사용자 ID (리뷰 등에서 사용)
                 name: payload.name,
                 email: payload.email,
                 picture: payload.picture,
