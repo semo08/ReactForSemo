@@ -2,11 +2,13 @@
 // Search.js - 영화 검색 페이지
 // ========================================
 // 사용자가 검색어를 입력하면 TMDb API로 영화를 검색
+// 최근 검색 기록 표시 기능 포함
 
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Header from "../components/Header";
 import Movie from "../components/Movie";
+import useSearchHistory from "../hooks/useSearchHistory";
 import styles from "./Search.module.css";
 
 // ========================================
@@ -32,13 +34,18 @@ function Search() {
     const [totalResults, setTotalResults] = useState(0); // 총 검색 결과 개수
 
     // ========================================
+    // 검색 기록 훅
+    // ========================================
+    const { history, addToHistory, removeFromHistory, clearHistory } = useSearchHistory();
+
+    // ========================================
     // 영화 검색 API 호출
     // ========================================
-    const searchMovies = async (query) => {
+    const searchMovies = async (query, saveToHistory = true) => {
         /*
             TMDb Search API 호출
             - query: 사용자가 입력한 검색어
-            - 예: "avatar", "toy story" 등
+            - saveToHistory: 검색 기록에 저장할지 여부
         */
 
         if (!query.trim()) {
@@ -68,6 +75,11 @@ function Search() {
 
             setMovies(json.results || []); // 결과 저장 (없으면 빈 배열)
             setTotalResults(json.total_results || 0); // 총 개수 저장
+
+            // 검색 기록에 추가
+            if (saveToHistory) {
+                addToHistory(query);
+            }
         } catch (error) {
             console.error("검색 실패:", error);
             alert("An error occurred during search.");
@@ -81,7 +93,7 @@ function Search() {
     // ========================================
     useEffect(() => {
         if (queryFromURL) {
-            searchMovies(queryFromURL);
+            searchMovies(queryFromURL, false); // URL에서 온 검색은 기록에 추가 안 함
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); // 컴포넌트 mount 시 1회만 실행
@@ -114,6 +126,15 @@ function Search() {
     };
 
     // ========================================
+    // 검색 기록 클릭 핸들러
+    // ========================================
+    const handleHistoryClick = (term) => {
+        setSearchQuery(term);
+        setSearchParams({ q: term });
+        searchMovies(term);
+    };
+
+    // ========================================
     // 메인 렌더링
     // ========================================
     return (
@@ -128,30 +149,82 @@ function Search() {
                     <h1 className={styles.title}>Search Movies</h1>
 
                     <form onSubmit={handleSubmit} className={styles.searchForm}>
-                        {/*
-                            input: 검색어 입력
-                            - type="text": 일반 텍스트 입력
-                            - value: 현재 값 (state와 연결)
-                            - onChange: 값이 바뀔 때마다 실행
-                            - placeholder: 힌트 텍스트
-                        */}
-                        <input
-                            type="text"
-                            value={searchQuery}
-                            onChange={handleInputChange}
-                            placeholder="Search for a movie..."
-                            className={styles.searchInput}
-                        />
+                        {/* 검색 입력 컨테이너 */}
+                        <div className={styles.inputWrapper}>
+                            <input
+                                type="text"
+                                value={searchQuery}
+                                onChange={handleInputChange}
+                                placeholder="Search for a movie..."
+                                className={styles.searchInput}
+                            />
+                            {/* 입력 내용 지우기 버튼 */}
+                            {searchQuery && (
+                                <button
+                                    type="button"
+                                    className={styles.clearInputBtn}
+                                    onClick={() => setSearchQuery("")}
+                                    aria-label="Clear search input"
+                                >
+                                    ✕
+                                </button>
+                            )}
+                        </div>
 
-                        {/*
-                            button: 검색 버튼
-                            - type="submit": 폼 제출 버튼
-                        */}
                         <button type="submit" className={styles.searchButton}>
-                            🔍 Search
+                            Search
                         </button>
                     </form>
                 </section>
+
+                {/* ========================================
+                    검색 기록 (검색 전에만 표시)
+                    ======================================== */}
+                {!searched && !loading && (
+                    <section className={styles.historySection}>
+                        {history.length > 0 ? (
+                            <>
+                                {/* 헤더 */}
+                                <div className={styles.historyHeader}>
+                                    <span className={styles.historyTitle}>RECENT SEARCHES</span>
+                                    <button
+                                        className={styles.clearAllButton}
+                                        onClick={clearHistory}
+                                    >
+                                        Clear All
+                                    </button>
+                                </div>
+
+                                {/* Pill 컨테이너 */}
+                                <div className={styles.historyContainer}>
+                                    {history.map((term, index) => (
+                                        <div key={index} className={styles.historyPill}>
+                                            <span
+                                                className={styles.historyTerm}
+                                                onClick={() => handleHistoryClick(term)}
+                                            >
+                                                {term}
+                                            </span>
+                                            <button
+                                                className={styles.historyDeleteBtn}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    removeFromHistory(term);
+                                                }}
+                                                aria-label={`Remove ${term} from history`}
+                                            >
+                                                ✕
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        ) : (
+                            /* 빈 상태 */
+                            <p className={styles.historyEmpty}>No recent searches yet</p>
+                        )}
+                    </section>
+                )}
 
                 {/* ========================================
                     로딩 중 화면
@@ -170,8 +243,8 @@ function Search() {
                         {/* 검색 결과 개수 */}
                         <h2 className={styles.resultsTitle}>
                             {totalResults > 0
-                                ? `Found ${totalResults} results for "${searchQuery}"`
-                                : `No results found for "${searchQuery}"`}
+                                ? `Found ${totalResults} results for "${searchParams.get("q")}"`
+                                : `No results found for "${searchParams.get("q")}"`}
                         </h2>
 
                         {/* 영화 목록 */}
@@ -201,26 +274,12 @@ function Search() {
                             // 검색 결과 없을 때
                             searched && !loading && (
                                 <div className={styles.noResults}>
-                                    <p>😢 No movies found</p>
+                                    <p>No movies found</p>
                                     <p>Try a different search term</p>
                                 </div>
                             )
                         )}
                     </section>
-                )}
-
-                {/* ========================================
-                    초기 화면 (검색 전)
-                    ======================================== */}
-                {!searched && !loading && (
-                    <div className={styles.initialState}>
-                        <p className={styles.initialText}>
-                            🎬 Search for your favorite movies
-                        </p>
-                        <p className={styles.initialSubText}>
-                            Enter a movie title above to get started
-                        </p>
-                    </div>
                 )}
             </div>
         </>

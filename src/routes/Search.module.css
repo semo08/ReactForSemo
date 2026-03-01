@@ -34,15 +34,46 @@
   margin: 0 auto;
 }
 
-.searchInput {
+/* 입력 래퍼 (input + clear 버튼) */
+.inputWrapper {
   flex: 1;
-  padding: 16px 24px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 16px 48px 16px 24px; /* 오른쪽 패딩 추가 (x 버튼 공간) */
   background: rgba(255, 255, 255, 0.05);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   color: #ffffff;
   font-size: 16px;
   transition: all 0.3s ease;
+}
+
+/* 입력 내용 지우기 버튼 */
+.clearInputBtn {
+  position: absolute;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.clearInputBtn:hover {
+  background: rgba(229, 9, 20, 0.8);
+  color: #ffffff;
 }
 
 .searchInput:focus {
@@ -130,24 +161,105 @@
 }
 
 /* ========================================
-   Initial State (검색 전)
+   Search History Section
    ======================================== */
-.initialState {
+.historySection {
+  max-width: 600px;
+  margin: 0 auto 60px;
   text-align: center;
-  padding: 120px 20px;
 }
 
-.initialText {
-  font-size: 32px;
+.historyHeader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.historyTitle {
+  font-size: 12px;
   font-weight: 600;
-  color: rgba(255, 255, 255, 0.8);
-  margin: 0 0 16px 0;
+  letter-spacing: 1.5px;
+  color: rgba(255, 255, 255, 0.5);
 }
 
-.initialSubText {
-  font-size: 18px;
+.clearAllButton {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.4);
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.2s ease;
+  padding: 4px 8px;
+}
+
+.clearAllButton:hover {
+  color: #e50914;
+}
+
+/* Pill 컨테이너 */
+.historyContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* 개별 Pill */
+.historyPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  transition: all 0.2s ease;
+}
+
+.historyPill:hover {
+  background: rgba(229, 9, 20, 0.15);
+  border-color: rgba(229, 9, 20, 0.4);
+}
+
+.historyTerm {
+  font-size: 14px;
+  color: #ffffff;
+  cursor: pointer;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.historyDeleteBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.historyDeleteBtn:hover {
+  background: rgba(229, 9, 20, 0.8);
+  color: #ffffff;
+}
+
+/* 빈 상태 */
+.historyEmpty {
+  font-size: 16px;
   color: rgba(255, 255, 255, 0.4);
   margin: 0;
+  padding: 40px 0;
 }
 
 /* ========================================
@@ -207,5 +319,19 @@
 @media (max-width: 480px) {
   .moviesGrid {
     grid-template-columns: 1fr;
+  }
+
+  /* 검색 기록 모바일 */
+  .historySection {
+    margin-bottom: 40px;
+  }
+
+  .historyPill {
+    padding: 8px 12px;
+  }
+
+  .historyTerm {
+    font-size: 13px;
+    max-width: 150px;
   }
 }
