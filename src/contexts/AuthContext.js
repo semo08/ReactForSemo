@@ -59,7 +59,7 @@ export function AuthProvider({ children }) {
                 // JSON 문자열을 객체로 변환
                 const userData = JSON.parse(savedUser);
                 setUser(userData);
-                console.log('✅ 로그인 상태 복원:', userData.name);
+                console.log('Login state restored:', userData.name);
             } catch (error) {
                 console.error('사용자 정보 복원 실패:', error);
                 // 잘못된 데이터면 삭제

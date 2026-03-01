@@ -78,14 +78,12 @@ function Header() {
             Google 로그인 성공 시 호출되는 함수
             response.credential: JWT 토큰 (사용자 정보 포함)
         */
-        console.log("✅ Google 로그인 응답 받음!");
+        console.log("Google login response received");
 
-        // AuthContext의 login 함수 호출
-        // → 토큰 디코딩 + 사용자 정보 저장 + localStorage 저장
         const userData = login(response.credential);
 
         if (userData) {
-            console.log("👤 로그인 완료:", userData.name);
+            console.log("Login completed:", userData.name);
         }
     };
 
@@ -96,7 +94,7 @@ function Header() {
         /*
             Google Identity Services 초기화
             - Google Script가 로드된 후 실행되어야 함
-            - 로그인 버튼 렌더링
+            - 로그인 버튼 렌더링 (데스크톱 + 모바일)
             - 로그아웃 시에도 다시 렌더링 (isLoggedIn 변경 감지)
         */
 
@@ -107,23 +105,21 @@ function Header() {
                 callback: handleCredentialResponse,
             });
 
-            // 로그인 버튼 렌더링 (loginBtn ID를 가진 요소에)
+            // 데스크톱 로그인 버튼 렌더링
             const loginButton = document.getElementById("loginBtn");
             if (loginButton) {
-                // 기존 버튼 내용 초기화 (중복 렌더링 방지)
                 loginButton.innerHTML = "";
-
                 window.google.accounts.id.renderButton(loginButton, {
-                    theme: "filled_black",   // 다크 테마 (어두운 배경)
-                    size: "medium",          // 중간 크기
-                    shape: "rectangular",    // 사각형 (기본)
-                    text: "signin",          // "Sign in" (짧은 텍스트)
-                    logo_alignment: "left",  // 로고 왼쪽 정렬
+                    theme: "filled_black",
+                    size: "medium",
+                    shape: "rectangular",
+                    text: "signin",
+                    logo_alignment: "left",
                 });
             }
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isLoggedIn]); // isLoggedIn 변경 시마다 실행
+    }, [isLoggedIn]);
 
     // ========================================
     // 5. 모바일 메뉴 토글 함수
@@ -227,7 +223,7 @@ function Header() {
                     <button
                         className={styles.menuButton}
                         onClick={toggleMenu}
-                        aria-label="메뉴 열기"
+                        aria-label="Open menu"
                     >
                         {/*
                             aria-label: 스크린 리더를 위한 설명
@@ -251,21 +247,21 @@ function Header() {
 
                     {/* 슬라이드 메뉴 */}
                     <div className={styles.drawer}>
-                        {/* 닫기 버튼 */}
+                        {/* Close button */}
                         <button
                             className={styles.closeButton}
                             onClick={toggleMenu}
-                            aria-label="메뉴 닫기"
+                            aria-label="Close menu"
                         >
                             ✕
                         </button>
 
-                        {/* 모바일 네비게이션 */}
+                        {/* Mobile navigation */}
                         <nav className={styles.mobileNav}>
                             <Link
                                 to="/"
                                 className={styles.mobileNavLink}
-                                onClick={toggleMenu} // 클릭하면 메뉴 닫힘
+                                onClick={toggleMenu}
                             >
                                 🏠 Home
                             </Link>
@@ -277,7 +273,7 @@ function Header() {
                                 🔍 Search
                             </Link>
 
-                            {/* Wishlist 링크 (로그인 시에만) */}
+                            {/* Wishlist link (logged in only) */}
                             {isLoggedIn && (
                                 <Link
                                     to="/wishlist"
@@ -288,9 +284,9 @@ function Header() {
                                 </Link>
                             )}
 
-                            {/* 로그인 / 프로필 영역 (모바일) */}
+                            {/* Login / Profile area (mobile) */}
                             {isLoggedIn ? (
-                                // 로그인 상태: 프로필 정보 + 로그아웃
+                                // Logged in: Profile info + Logout
                                 <div className={styles.mobileProfileArea}>
                                     <div className={styles.mobileUserInfo}>
                                         <img
@@ -314,15 +310,21 @@ function Header() {
                                     </button>
                                 </div>
                             ) : (
-                                // 비로그인 상태: 로그인 안내
-                                <div className={styles.mobileLoginArea}>
-                                    <p className={styles.mobileLoginText}>
-                                        Login required
-                                    </p>
-                                    <p className={styles.mobileLoginSubText}>
-                                        Please login on desktop
-                                    </p>
-                                </div>
+                                // Not logged in: Custom login button
+                                <button
+                                    className={styles.mobileNavLink}
+                                    onClick={() => {
+                                        if (window.google && CLIENT_ID) {
+                                            window.google.accounts.id.initialize({
+                                                client_id: CLIENT_ID,
+                                                callback: handleCredentialResponse,
+                                            });
+                                            window.google.accounts.id.prompt();
+                                        }
+                                    }}
+                                >
+                                    🔐 Sign In
+                                </button>
                             )}
                         </nav>
                     </div>
