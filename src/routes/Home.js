@@ -16,6 +16,16 @@ import styles from "./Home.module.css";
 const IMG_BASE_URL = "https://image.tmdb.org/t/p/w500";      // 포스터 이미지 URL
 const API_KEY = process.env.REACT_APP_TMDB_API_KEY;          // 환경변수에서 API 키 가져오기
 
+// ========================================
+// 정렬 옵션 정의
+// ========================================
+const SORT_OPTIONS = [
+  { value: "popularity.desc", label: "Popular" },
+  { value: "vote_average.desc", label: "Top Rated" },
+  { value: "release_date.desc", label: "Latest" },
+  { value: "revenue.desc", label: "Highest Grossing" },
+];
+
 function Home() {
   const [loading, setLoading] = useState(true);
   const [movies, setMovies] = useState([]);
@@ -25,9 +35,16 @@ function Home() {
   // 페이지네이션 상태 (sessionStorage에서 복원)
   // ========================================
   const [currentPage, setCurrentPage] = useState(() => {
-    // 뒤로가기로 돌아왔을 때 이전 페이지 번호 복원
     const savedPage = sessionStorage.getItem('homeCurrentPage');
     return savedPage ? parseInt(savedPage) : 1;
+  });
+
+  // ========================================
+  // 정렬 상태 (sessionStorage에서 복원)
+  // ========================================
+  const [sortBy, setSortBy] = useState(() => {
+    const savedSort = sessionStorage.getItem('homeSortBy');
+    return savedSort || "popularity.desc";
   });
 
   const totalPages = 5;
@@ -50,11 +67,14 @@ function Home() {
     }
   };
 
-  const getMovies = async (page) => {
+  const getMovies = async (page, sort) => {
     setLoading(true);
     try {
+      // Top Rated 정렬 시 투표 수 최소값 필터 추가 (신뢰성 있는 평점)
+      const voteFilter = sort === "vote_average.desc" ? "&vote_count.gte=200" : "";
+
       const response = await fetch(
-        `https://api.themoviedb.org/3/movie/popular?api_key=${API_KEY}&language=en-US&page=${page}`
+        `https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=${sort}&page=${page}${voteFilter}`
       );
       const json = await response.json();
       if (json.results) {
@@ -69,7 +89,6 @@ function Home() {
     } finally {
       setLoading(false);
     }
-
   };
 
   // ========================================
@@ -77,17 +96,25 @@ function Home() {
   // ========================================
   useEffect(() => {
     getGenres();
-    getMovies(currentPage);   // 현재 페이지의 영화만 불러오기
-  }, [currentPage]);    // currentPage가 바뀔 때마다 실행
-  console.log(movies);
+    getMovies(currentPage, sortBy);
+  }, [currentPage, sortBy]); // 페이지 또는 정렬 변경 시 실행
 
   // ========================================
-  // currentPage를 sessionStorage에 저장
+  // 상태를 sessionStorage에 저장
   // ========================================
   useEffect(() => {
-    // 페이지가 바뀔 때마다 저장 (뒤로가기 시 복원용)
     sessionStorage.setItem('homeCurrentPage', currentPage.toString());
-  }, [currentPage]);
+    sessionStorage.setItem('homeSortBy', sortBy);
+  }, [currentPage, sortBy]);
+
+  // ========================================
+  // 정렬 변경 핸들러
+  // ========================================
+  const handleSortChange = (e) => {
+    setSortBy(e.target.value);
+    setCurrentPage(1); // 정렬 변경 시 1페이지로
+    window.scrollTo(0, 0);
+  };
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -109,6 +136,23 @@ function Home() {
           <div className={styles.loading}>Loading...</div>
         ) : (
           <div>
+            {/* 정렬 옵션 */}
+            <div className={styles.sortSection}>
+              <label htmlFor="sortSelect" className={styles.sortLabel}>Sort by</label>
+              <select
+                id="sortSelect"
+                value={sortBy}
+                onChange={handleSortChange}
+                className={styles.sortSelect}
+              >
+                {SORT_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div className={styles.moviesGrid}>
             {movies.map((movie) => (
               <Movie  // pagenation
