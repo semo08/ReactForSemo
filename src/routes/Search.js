@@ -89,14 +89,22 @@ function Search() {
     };
 
     // ========================================
-    // URL에서 검색어가 있으면 자동 검색
+    // URL 파라미터 변경 시 상태 동기화
     // ========================================
     useEffect(() => {
         if (queryFromURL) {
-            searchMovies(queryFromURL, false); // URL에서 온 검색은 기록에 추가 안 함
+            // URL에 검색어가 있으면 검색 실행
+            setSearchQuery(queryFromURL);
+            searchMovies(queryFromURL, false);
+        } else {
+            // URL에 검색어가 없으면 초기 상태로 리셋
+            setSearchQuery("");
+            setMovies([]);
+            setSearched(false);
+            setTotalResults(0);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []); // 컴포넌트 mount 시 1회만 실행
+    }, [queryFromURL]); // URL 파라미터가 변경될 때마다 실행
 
     // ========================================
     // 검색 폼 제출 핸들러
@@ -163,7 +171,10 @@ function Search() {
                                 <button
                                     type="button"
                                     className={styles.clearInputBtn}
-                                    onClick={() => setSearchQuery("")}
+                                    onClick={() => {
+                                        setSearchQuery("");
+                                        setSearchParams({}); // URL 파라미터 제거 → 초기 상태로
+                                    }}
                                     aria-label="Clear search input"
                                 >
                                     ✕

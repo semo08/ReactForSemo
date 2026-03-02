@@ -417,6 +417,7 @@
     color: #ffffff;
     padding: 6px 16px;
     border-radius: 20px;
+    font-family: inherit;
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -509,6 +510,7 @@
     color: #ffffff;
     padding: 12px 20px;
     border-radius: 8px;
+    font-family: inherit;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
